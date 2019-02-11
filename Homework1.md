@@ -9,18 +9,29 @@ To further group this data we can conjecture that:
 
 And we have the following output
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/2_HG2.png)
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_A1.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_A2.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_A3.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_A4.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_B1.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_B2.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_B3.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_B4.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_C1.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_C2.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_C3.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_C4.png)
 
 #### Conclusion: 
 
@@ -30,34 +41,47 @@ Based on the 12 graphs above, We can see there are significant points in ggplots
 
 The mean delay is calculated for each airport and is graphed as under:
 
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/2_HG1.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/2_HG2.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/2_HG3.png)
 
 Mapping the airports with delay time in minutes greater than the overall average delay time. 
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/2_map.png)
 
 ### Question 3
 
 Started with segregating the data into two datasets with two different trims (trim = 350 and trim = 65 AMG). Have run K-nearest-neighbours, made predictions and calculated out of sample RMSE for many different values of K and plotted the required results. 
 
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_1.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_2.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_3.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_4.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_5.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_6.png)
 
 ##### Optimal k = 68 for trim 350
 
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_7.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_8.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_9.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_10.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_11.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_12.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/3_13.png)
 
 #### Conclusion: 
 The dataset with trim = 350 yields a larger optimal value of k because it has more observations than the dataset with trim = 65 AMG. The former has 416 observations while the latter has 292 observations. The optimal value of k is 68 for trim = 350 while the optimal value of k for trim = 65 AMG is 11, at least for the random sample that was drawn for this case.
