@@ -88,11 +88,11 @@ b3=b[35:51]
 b1 <- b1[!is.na(b1)]
 b2 <- b2[!is.na(b2)]
 #for first 17 airports
-barplot(b1, main="Average Delay for destination", xlab="Destination", ylab="Delay (in mins)", horiz=TRUE, las=1,names.arg=c(a1) ,border="red")
+barplot(b1, main="Average Delay for destination", xlab="Delay (in mins)", ylab="Destination", horiz=TRUE, las=1,names.arg=c(a1) ,border="red")
 #for mid 17 airports
-barplot(b2, main="Average Delay for destination", xlab="Destination", ylab="Delay (in mins)", horiz=TRUE, las=1,names.arg=c(a2) ,border="red")
+barplot(b2, main="Average Delay for destination", xlab="Delay (in mins)", ylab="Destination", horiz=TRUE, las=1,names.arg=c(a2) ,border="red")
 #for last 17 airports
-barplot(b3, main="Average Delay for destination", xlab="Destination", ylab="Delay (in mins)", horiz=TRUE, las=1,names.arg=c(a3) ,border="red")
+barplot(b3, main="Average Delay for destination", xlab="Delay (in mins)", ylab="Destination", horiz=TRUE, las=1,names.arg=c(a3) ,border="red")
 
 # Mapping the airports with delay time in minutes greater than the overall average delay time
 
