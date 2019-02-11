@@ -9,4 +9,4 @@ To further group this data we can conjecture that:
 
 And we have the following output
 
-![](D:/MA.ECON/Data mining & Stat learning/test1.png)
+![](test1.png)
