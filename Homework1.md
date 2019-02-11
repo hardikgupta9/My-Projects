@@ -9,7 +9,7 @@ To further group this data we can conjecture that:
 
 And we have the following output
 
-![](My-Projects/2_HG2.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/2_HG2.png)
 ![]("My-Projects/test1.PNG")
 ![]("My-Projects/test1.PNG")
 ![]("My-Projects/test1.PNG")
