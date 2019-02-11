@@ -1,0 +1,470 @@
+# Question 1
+
+library(tidyverse)
+
+#The question talks about a picture that produces a better apples-to-apples comparison. There are several variables that might affect the rent of a building namely: cluster, age, renovated, class, amenities, net, employment growth in area.
+#To further group this data we can conjecture that:
+#1) For a particular building accounting for the cluster, we can account for amenities, average rent and employment growth in that area. And since there are quite a lot of values of cluster we’ll take it on x-axis.
+#2) For a particular building accounting for the class, we can account for age and renovation criteria since overall quality of the building is evaluated by class variable. Thus we will prepare graph for every class. 
+#3) Also we know that the rent might become biased based on whether the rent includes utility cost or not thus we will take the net=1 buildings separately and net=0 in another graph. 
+#And we have the following output
+
+gb = read.csv("~/Downloads/ECO395M-master/data/greenbuildings.csv")
+
+#class_a
+myplot1<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(0,600) + labs(title = "ClassA", x = "Cluster(0-600)", y = "Rent excluding utilities")
+myplot1 %+% subset(gb, class_a %in% c("1") &net %in% c("0"))
+
+myplot3<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(900,1250) + labs(title = "ClassA", x = "Cluster(900-1250)", y = "Rent excluding utilities")
+myplot3 %+% subset(gb, class_a %in% c("1")&net %in% c("0"))
+
+myplot11<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(0,600) + labs(title = "ClassA", x = "Cluster(0-600)", y = "Rent including utilities")
+myplot11 %+% subset(gb, class_a %in% c("1") &net %in% c("1"))
+
+myplot33<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(900,1250) + labs(title = "ClassA", x = "Cluster(0-600)", y = "Rent including utilities")
+myplot33 %+% subset(gb, class_a %in% c("1")&net %in% c("1"))
+
+#class_b
+myplot4<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(0,600) + labs(title = "ClassB", x = "Cluster(0-600)", y = "Rent excluding utilities")
+myplot4 %+% subset(gb, class_b %in% c("1") &net %in% c("0"))
+
+myplot5<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(900,1250) + labs(title = "ClassB", x = "Cluster(900-1250)", y = "Rent excluding utilities")
+myplot5 %+% subset(gb, class_b %in% c("1")&net %in% c("0"))
+
+myplot6<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating))+xlim(0,600) + labs(title = "ClassB", x = "Cluster(0-600)", y = "Rent including utilities")
+myplot6 %+% subset(gb, class_b %in% c("1") &net %in% c("1"))
+
+myplot7<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(900,1250) + labs(title = "ClassB", x = "Cluster(900-1250)", y = "Rent including utilities")
+myplot7 %+% subset(gb, class_b %in% c("1")&net %in% c("1"))
+
+#class_c
+myplot8<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(0,600) + labs(title = "ClassC", x = "Cluster(0-600)", y = "Rent excluding utilities")
+myplot8 %+% subset(gb, class_a %in% c("0") &class_b %in% c("0")&net %in% c("0") )
+
+myplot9<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(950,1250) + labs(title = "ClassC", x = "Cluster(900-1250)", y = "Rent excluding utilities")
+myplot9 %+% subset(gb, class_a %in% c("0") &class_b %in% c("0")&net %in% c("0") )
+
+myplot10<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(0,600) + labs(title = "ClassC", x = "Cluster(0-600)", y = "Rent including utilities")
+myplot10 %+% subset(gb, class_a %in% c("0") &class_b %in% c("0")&net %in% c("1") )
+
+myplot99<-ggplot(data = gb) +  geom_point(mapping = aes(x = cluster, y = Rent, color = green_rating)) + xlim(950,1250) + labs(title = "ClassC", x = "Cluster(900-1250)", y = "Rent including utilities")
+myplot99 %+% subset(gb, class_a %in% c("0") &class_b %in% c("0")&net %in% c("1") )
+
+
+#Conclusion: Based on the 12 graphs above, We can see there are significant points in ggplots that represent the green building receiving rent less than normal buildings and also close to the mean rent of the cluster. Although in some cases such as class B cases there is more possibility of higher rent recovery from green buildings. Thus we cannot confidently conclude that the expectation of rent covered from a green building would be more than that of a normal building without any further information about the proposed building. Hence its uncertain whether investing in a green building will be worth it or not. 
+
+
+
+# Question 2
+
+library(tidyverse)
+
+aa = read.csv("~/Downloads/ECO395M-master/data/abia.csv")
+
+aa_s = subset(aa, Origin == 'AUS'& Cancelled == '0' & Diverted == '0' & ArrDelay> '0' )
+dep_del = aa_s[,16]
+arr_del = aa_s[,15]
+
+#delay is only due to airport as we will remove the delay occuring at ABIA
+#delay = arr_del - dep_del
+
+airports = unique(aa_s[,18])
+a <- as.character(airports)
+library(FactorsR)
+b = matrix(0,1,51)
+b1= matrix(0,1,17)
+b2= matrix(0,1,17)
+b3= matrix(0,1,17)
+a1 = a[1:17]
+a2 = a[18:34]
+a3 = a[35:51]
+for (i in 1:51){
+b[i] = mean(aa_s[,15][aa_s[,18]==a[i]])
+}  
+b1=b[1:17]
+b2=b[18:34]
+b3=b[35:51]
+
+b1 <- b1[!is.na(b1)]
+b2 <- b2[!is.na(b2)]
+#for first 17 airports
+barplot(b1, main="Average Delay for destination", xlab="Destination", ylab="Delay (in mins)", horiz=TRUE, las=1,names.arg=c(a1) ,border="red")
+#for mid 17 airports
+barplot(b2, main="Average Delay for destination", xlab="Destination", ylab="Delay (in mins)", horiz=TRUE, las=1,names.arg=c(a2) ,border="red")
+#for last 17 airports
+barplot(b3, main="Average Delay for destination", xlab="Destination", ylab="Delay (in mins)", horiz=TRUE, las=1,names.arg=c(a3) ,border="red")
+
+# Mapping the airports with delay time in minutes greater than the overall average delay time
+
+library(ggmap)
+library(usmap)
+
+codes = read.csv("~/Downloads/airport-codes-master/data/airport-codes.csv")
+newcodes = codes[c(3, 8, 10, 12)]
+newcodes1 = newcodes[-which(newcodes$iata == ""), ]
+
+delay_time = newcodes1[which(newcodes1$iata=="ONT" | newcodes1$iata=="ORD" | newcodes1$iata=="JFK" | newcodes1$iata=="EWR" | newcodes1$iata=="BOS" | newcodes1$iata=="IAD" | newcodes1$iata=="ATL" | newcodes1$iata=="JAX" | newcodes1$iata=="SFO" | newcodes1$iata=="TUL" | newcodes1$iata=="STL" | newcodes1$iata=="MCO" | newcodes1$iata=="PHL" | newcodes1$iata=="DSM" | newcodes1$iata=="LGB" | newcodes1$iata=="FLL"), ]
+
+delay = separate(delay_time, coordinates, into = c("long", "lat"), sep = ",")
+delay
+
+mapping <- data.frame(
+long = c(-84.4281, -71.0052, -93.6631, -74.1687, -80.1527, -77.4558, -81.6879, - 73.7789, -118.1520, -81.3090, -117.6010, -87.9048, -75.2411, -122.3750, -90.3700, -95.8881),
+lat = c(33.6367, 42.3643, 41.5340, 40.6925, 26.0726, 38.9445, 30.4941, 40.6398, 33.8177, 28.4294, 34.0560, 41.9786, 39.8719, 37.6190, 38.7487, 36.1984),
+stringsAsFactors = FALSE
+)  
+
+mp = ggplot(data = states) + geom_polygon(aes(x = long, y = lat, fill = region, group = group), color = "white") + coord_fixed(1.3) + guides(fill=FALSE) + scale_fill_hue(c=45, l=85) + labs(x = "Longitude", y = "Latitude")
+
+mp1 = imp + geom_point(data = mapping, aes(x = long, y = lat), colour = "darkblue", size = 2) + labs(title = "Airports with delay greater than the overall average delay time")
+mp1
+
+# The map simply plots cities that have the individual average delay time greater than the overall average delay time.
+
+# Question 3
+
+library(mosaic)
+sclass = read.csv("~/Downloads/ECO395M-master/data/sclass.csv")
+summary(sclass)
+
+# Forming two different datasets based on the given two trim levels 
+
+sclass350 = subset(sclass, trim == '350')
+summary(sclass350)
+
+sclass65AMG = subset(sclass, trim == '65 AMG')
+summary(sclass65AMG)
+
+library(tidyverse)
+library(FNN)
+
+# Plots of Price versus Mileage for the two trims
+
+plot1 = ggplot(data = sclass350) + geom_point(mapping = aes(x = mileage, y = price), color='blue') + ylim(5000, 110000) + xlim(0, 175000) + labs(x = "Mileage", y = "Price", title = "Price given Mileage for Trim level 350")
+plot1
+
+plot2 = ggplot(data = sclass65AMG) + geom_point(mapping = aes(x = mileage, y = price), color='orange') + ylim(15000, 250000) + xlim(0, 150000) + labs(x = "Mileage", y = "Price", title = "Price given Mileage for Trim level 65 AMG")
+plot2
+
+# Make a train-test split
+
+N1 = nrow(sclass350)
+N_train1 = floor(0.8*N1)
+N_test1 = N1 - N_train1
+
+# Drawing a random sample and forming the train and test datasets
+
+train1 = sample.int(N1, N_train1, replace=FALSE)
+
+d_train1 = sclass350[train1,]
+d_test1 = sclass350[-train1,]
+
+nrow(d_train1)
+
+d_test1 = arrange(d_test1, mileage)
+head(d_test1)
+
+X_train1 = select(d_train1, mileage)
+y_train1 = select(d_train1, price)
+X_test1 = select(d_test1, mileage)
+y_test1 = select(d_test1, price)
+
+# Running K-nearest neighbours for different values of k and finding predicted prices
+
+pred_0031 = knn.reg(X_train1, X_test1, y_train1, k=3)
+pred_0051 = knn.reg(X_train1, X_test1, y_train1, k=5)
+pred_0101 = knn.reg(X_train1, X_test1, y_train1, k=10)
+pred_0151 = knn.reg(X_train1, X_test1, y_train1, k=15)
+pred_0251 = knn.reg(X_train1, X_test1, y_train1, k=25)
+pred_0501 = knn.reg(X_train1, X_test1, y_train1, k=50)
+pred_0751 = knn.reg(X_train1, X_test1, y_train1, k=75)
+pred_1001 = knn.reg(X_train1, X_test1, y_train1, k=100)
+pred_1251 = knn.reg(X_train1, X_test1, y_train1, k=125)
+pred_1501 = knn.reg(X_train1, X_test1, y_train1, k=150)
+pred_1751 = knn.reg(X_train1, X_test1, y_train1, k=175)
+pred_2001 = knn.reg(X_train1, X_test1, y_train1, k=200)
+pred_2251 = knn.reg(X_train1, X_test1, y_train1, k=225)
+pred_2501 = knn.reg(X_train1, X_test1, y_train1, k=250)
+pred_2751 = knn.reg(X_train1, X_test1, y_train1, k=275)
+pred_3001 = knn.reg(X_train1, X_test1, y_train1, k=300)
+
+ypred_k31 = pred_0031$pred
+ypred_k51 = pred_0051$pred
+ypred_k101 = pred_0101$pred
+ypred_k151 = pred_0151$pred
+ypred_k251 = pred_0251$pred
+ypred_k501 = pred_0501$pred
+ypred_k751 = pred_0751$pred
+ypred_k1001 = pred_1001$pred
+ypred_k1251 = pred_1251$pred
+ypred_k1501 = pred_1501$pred
+ypred_k1751 = pred_1751$pred
+ypred_k2001 = pred_2001$pred
+ypred_k2251 = pred_2251$pred
+ypred_k2501 = pred_2501$pred
+ypred_k2751 = pred_2751$pred
+ypred_k3001 = pred_3001$pred
+
+# Plots of test data with predicted prices different values of k
+
+library(gridExtra)
+
+p_test1 = ggplot(data = d_test1) + geom_point(mapping = aes(x = mileage, y = price), color='purple') + theme_bw(base_size=8) + labs(x = "Mileage", y = "Price") + scale_x_continuous(breaks = scales::pretty_breaks(n = 5), labels = scales::comma) + scale_y_continuous(breaks = scales::pretty_breaks(n = 6), labels = scales::comma)
+
+
+p11a = p_test1 + geom_path(aes(x = mileage, y = ypred_k31), color='orange') + labs(title = "k=3")
+
+
+p22a = p_test1 + geom_path(aes(x = mileage, y = ypred_k51), color='orange') + labs(title = "k=5")
+
+
+p33a = p_test1 + geom_path(aes(x = mileage, y = ypred_k101), color='orange') + labs(title = "k=10")
+
+
+p44a = p_test1 + geom_path(aes(x = mileage, y = ypred_k151), color='orange') + labs(title = "k=15")
+
+
+p55a = p_test1 + geom_path(aes(x = mileage, y = ypred_k251), color='orange') + labs(title = "k=25")
+
+
+p66a = p_test1 + geom_path(aes(x = mileage, y = ypred_k501), color='orange') + labs(title = "k=50")
+
+
+p77a = p_test1 + geom_path(aes(x = mileage, y = ypred_k751), color='orange') + labs(title = "k=75")
+
+
+p88a = p_test1 + geom_path(aes(x = mileage, y = ypred_k1001), color='orange') + labs(title = "k=100")
+
+
+p99a = p_test1 + geom_path(aes(x = mileage, y = ypred_k1251), color='orange') + labs(title = "k=125")
+
+
+p1010a = p_test1 + geom_path(aes(x = mileage, y = ypred_k1501), color='orange') + labs(title = "k=150")
+
+
+p1111a = p_test1 + geom_path(aes(x = mileage, y = ypred_k1751), color='orange') + labs(title = "k=175")
+
+
+p1212a = p_test1 + geom_path(aes(x = mileage, y = ypred_k2001), color='orange') + labs(title = "k=200")
+
+p1313a = p_test1 + geom_path(aes(x = mileage, y = ypred_k2251), color='orange') + labs(title = "k=225")
+
+
+p1414a = p_test1 + geom_path(aes(x = mileage, y = ypred_k2501), color='orange') + labs(title = "k=250")
+
+
+p1515a = p_test1 + geom_path(aes(x = mileage, y = ypred_k2751), color='orange') + labs(title = "k=275")
+
+
+p1616a = p_test1 + geom_path(aes(x = mileage, y = ypred_k3001), color='orange') + labs(title = "k=300")
+
+
+library(grid)
+
+gr11 = grid.arrange(arrangeGrob(p11a + theme(legend.position="none"), p22a + theme(legend.position="none"), p33a + theme(legend.position="none"), p44a + theme(legend.position="none")), nrow=1)
+gr11
+
+gr21 = grid.arrange(arrangeGrob(p55a + theme(legend.position="none"), p66a + theme(legend.position="none"), p77a + theme(legend.position="none"), p88a + theme(legend.position="none")), nrow=1)
+gr21
+
+gr31 = grid.arrange(arrangeGrob(p99a + theme(legend.position="none"), p1010a + theme(legend.position="none"), p1111a + theme(legend.position="none"), p1212a + theme(legend.position="none")), nrow=1)
+gr31
+
+gr4 = grid.arrange(arrangeGrob(p1313a + theme(legend.position="none"), p1414a + theme(legend.position="none"), p1515a + theme(legend.position="none"), p1616a + theme(legend.position="none")), nrow=1)
+gr4
+
+# Calculating RMSE for k values from 1 to 200 and plotting the out-of-sample RMSE against the k values
+
+rmse = function(actual, predicted) {
+sqrt(mean((actual - predicted) ^ 2))
+}
+
+make_knn_pred = function(k = 1, training, predicting) {
+pred = FNN::knn.reg(train = training["mileage"], test = predicting["mileage"], y = training$price, k = k)$pred
+act  = predicting$price
+rmse(predicted = pred, actual = act)
+}
+
+k = seq(1, 300, 1)
+
+knn_tst_rmse = sapply(k, make_knn_pred, training = d_train1, predicting = d_test1)
+
+best_k1 = k[which.min(knn_tst_rmse)]
+
+knn_results = data.frame(
+k,
+round(knn_tst_rmse, 2)
+)
+colnames(knn_results) = c("k", "Test RMSE")
+
+knitr::kable(knn_results, escape = FALSE, booktabs = TRUE)
+best_k1
+
+# best_k gives the optimal value of k for which the RMSE is minimized
+
+pp1 = ggplot(knn_results) + geom_path(aes(x = k, y = knn_tst_rmse), color = "aquamarine4", size = 1.5) 
+
+ppp11 = pp1 + labs(x = "k", y = "RMSE", title = "Out-of-sample RMSE for each value of k for trim 350") + scale_x_continuous(trans = "reverse") 
+ppp11
+
+# Graph of fitted model for optimal k
+
+pred_opt1 = knn.reg(X_train1, X_test1, y_train1, k=68)
+
+ypred_kopt1 = pred_opt1$pred
+
+popt1 = p_test1 + geom_path(aes(x = mileage, y = ypred_kopt1), color='orange') + labs(title = "Fitted Model for Optimal k when trim = 350")
+popt1
+
+# Part 2
+
+# Make a train-test split
+
+N2 = nrow(sclass65AMG)
+N_train2 = floor(0.8*N2)
+N_test2 = N2 - N_train2
+
+# Drawing a random sample and forming the train and test datasets
+
+train2 = sample.int(N2, N_train2, replace=FALSE)
+
+d_train2 = sclass350[train2,]
+d_test2 = sclass350[-train2,]
+
+nrow(d_train2)
+
+d_test2 = arrange(d_test2, mileage)
+head(d_test2)
+
+X_train2 = select(d_train2, mileage)
+y_train2 = select(d_train2, price)
+X_test2 = select(d_test2, mileage)
+y_test2 = select(d_test2, price)
+
+# Running K-nearest neighbours for different values of k and finding predicted prices
+
+pred_003 = knn.reg(X_train2, X_test2, y_train2, k=3)
+pred_005 = knn.reg(X_train2, X_test2, y_train2, k=5)
+pred_010 = knn.reg(X_train2, X_test2, y_train2, k=10)
+pred_015 = knn.reg(X_train2, X_test2, y_train2, k=15)
+pred_025 = knn.reg(X_train2, X_test2, y_train2, k=25)
+pred_050 = knn.reg(X_train2, X_test2, y_train2, k=50)
+pred_075 = knn.reg(X_train2, X_test2, y_train2, k=75)
+pred_100 = knn.reg(X_train2, X_test2, y_train2, k=100)
+pred_125 = knn.reg(X_train2, X_test2, y_train2, k=125)
+pred_150 = knn.reg(X_train2, X_test2, y_train2, k=150)
+pred_175 = knn.reg(X_train2, X_test2, y_train2, k=175)
+pred_200 = knn.reg(X_train2, X_test2, y_train2, k=200)
+
+
+ypred_k3 = pred_003$pred
+ypred_k5 = pred_005$pred
+ypred_k10 = pred_010$pred
+ypred_k15 = pred_015$pred
+ypred_k25 = pred_025$pred
+ypred_k50 = pred_050$pred
+ypred_k75 = pred_075$pred
+ypred_k100 = pred_100$pred
+ypred_k125 = pred_125$pred
+ypred_k150 = pred_150$pred
+ypred_k175 = pred_175$pred
+ypred_k200 = pred_200$pred
+
+# Plots of test data with predicted prices different values of k
+
+library(gridExtra)
+
+p_test = ggplot(data = d_test2) + geom_point(mapping = aes(x = mileage, y = price), color='purple') + theme_bw(base_size=8) + labs(x = "Mileage", y = "Price") + scale_x_continuous(breaks = scales::pretty_breaks(n = 5), labels = scales::comma) + scale_y_continuous(breaks = scales::pretty_breaks(n = 6), labels = scales::comma)
+
+
+p11 = p_test + geom_path(aes(x = mileage, y = ypred_k3), color='orange') + labs(title = "k=3")
+
+
+p22 = p_test + geom_path(aes(x = mileage, y = ypred_k5), color='orange') + labs(title = "k=5")
+
+
+p33 = p_test + geom_path(aes(x = mileage, y = ypred_k10), color='orange') + labs(title = "k=10")
+
+
+p44 = p_test + geom_path(aes(x = mileage, y = ypred_k15), color='orange') + labs(title = "k=15")
+
+
+p55 = p_test + geom_path(aes(x = mileage, y = ypred_k25), color='orange') + labs(title = "k=25")
+
+
+p66 = p_test + geom_path(aes(x = mileage, y = ypred_k50), color='orange') + labs(title = "k=50")
+
+
+p77 = p_test + geom_path(aes(x = mileage, y = ypred_k75), color='orange') + labs(title = "k=75")
+
+
+p88 = p_test + geom_path(aes(x = mileage, y = ypred_k100), color='orange') + labs(title = "k=100")
+
+
+p99 = p_test + geom_path(aes(x = mileage, y = ypred_k125), color='orange') + labs(title = "k=125")
+
+
+p1010 = p_test + geom_path(aes(x = mileage, y = ypred_k150), color='orange') + labs(title = "k=150")
+
+
+p1111 = p_test + geom_path(aes(x = mileage, y = ypred_k175), color='orange') + labs(title = "k=175")
+
+
+p1212 = p_test + geom_path(aes(x = mileage, y = ypred_k200), color='orange') + labs(title = "k=200")
+
+
+library(grid)
+
+gr1 = grid.arrange(arrangeGrob(p11 + theme(legend.position="none"), p22 + theme(legend.position="none"), p33 + theme(legend.position="none"), p44 + theme(legend.position="none")), nrow=1)
+gr1
+
+gr2 = grid.arrange(arrangeGrob(p55 + theme(legend.position="none"), p66 + theme(legend.position="none"), p77 + theme(legend.position="none"), p88 + theme(legend.position="none")), nrow=1)
+gr2
+
+gr3 = grid.arrange(arrangeGrob(p99 + theme(legend.position="none"), p1010 + theme(legend.position="none"), p1111 + theme(legend.position="none"), p1212 + theme(legend.position="none")), nrow=1)
+gr3
+
+# Calculating RMSE for k values from 1 to 200 and plotting the out-of-sample RMSE against the k values
+
+rmse = function(actual, predicted) {
+  sqrt(mean((actual - predicted) ^ 2))
+}
+
+make_knn_pred = function(k = 1, training, predicting) {
+pred = FNN::knn.reg(train = training["mileage"], test = predicting["mileage"], y = training$price, k = k)$pred
+act  = predicting$price
+rmse(predicted = pred, actual = act)
+}
+
+k = seq(1, 200, 1)
+
+knn_tst_rmse = sapply(k, make_knn_pred, training = d_train2, predicting = d_test2)
+
+best_k = k[which.min(knn_tst_rmse)]
+
+knn_results = data.frame(
+k,
+round(knn_tst_rmse, 2)
+)
+colnames(knn_results) = c("k", "Test RMSE")
+
+knitr::kable(knn_results, escape = FALSE, booktabs = TRUE)
+best_k
+
+# best_k gives the optimal value of k for which the RMSE is minimized
+
+pp = ggplot(knn_results) + geom_path(aes(x = k, y = knn_tst_rmse), color = "aquamarine4", size = 1.5) 
+
+ppp1 = pp + labs(x = "k", y = "RMSE", title = "Out-of-sample RMSE for each value of K for trim = 65 AMG") + scale_x_continuous(trans = "reverse") 
+ppp1
+
+# Graph of fitted model for optimal k
+
+pred_opt = knn.reg(X_train2, X_test2, y_train2, k=11)
+
+ypred_kopt = pred_opt$pred
+
+popt = p_test + geom_path(aes(x = mileage, y = ypred_kopt), color='orange') + labs(title = "Fitted Model for Optimal k when trim = 65 AMG")
+popt
+
+# Conclusion: The dataset with trim = 350 yields a larger optimal value of k because it has more observations than the dataset with trim = 65 AMG. The former has 416 observations while the latter has 292 observations. The optimal value of k is 68 for trim = 350 while the optimal value of k for trim = 65 AMG is 11, at least for the random sample that was drawn for this case. 
