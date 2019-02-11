@@ -10,3 +10,5 @@ To further group this data we can conjecture that:
 And we have the following output
 
 ![]("My-Projects/test1.PNG")
+
+Conclusion: Based on the 12 graphs above, We can see there are significant points in ggplots that represent the green building receiving rent less than normal buildings and also close to the mean rent of the cluster. Although in some cases such as class B cases there is more possibility of higher rent recovery from green buildings. Thus we cannot confidently conclude that the expectation of rent covered from a green building would be more than that of a normal building without any further information about the proposed building. Hence its uncertain whether investing in a green building will be worth it or not. 
