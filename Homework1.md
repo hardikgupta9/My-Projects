@@ -8,3 +8,5 @@ To further group this data we can conjecture that:
 3) Also we know that the rent might become biased based on whether the rent includes utility cost or not thus we will take the net=1 buildings separately and net=0 in another graph. 
 
 And we have the following output
+
+![](D:/MA.ECON/Data mining & Stat learning/test1.png)
