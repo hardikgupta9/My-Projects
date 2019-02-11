@@ -9,4 +9,4 @@ To further group this data we can conjecture that:
 
 And we have the following output
 
-![](test1.png)
+![](My-Projects/test1.PNG)
