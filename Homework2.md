@@ -13,7 +13,7 @@ The hand-build model takes into account lotSize, age,landValue, livingArea, pctC
 
 We expect the land value to mostly certainly have a positive relationship with the house prices and should be a crucial factor as well. Even the variable new construction could serve as an important explanatory variable as old buildings might have a lower price attached to themselves compared to the newer ones with longer asset life. Also, the area dedicated to the living space might affect the number of bedrooms and vice versa. A smaller living area might be compensated with more number of bedrooms or both could have a positive relationship and may impact each other and thus each have an indirect effect on price  through the other. Same could be said about the other interaction term included. 
 
-.The coefficients of the hand-build model has been described as below:
+The coefficients of the hand-build model has been described as below:
 
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_h.PNG)
