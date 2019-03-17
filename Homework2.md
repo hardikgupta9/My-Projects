@@ -108,16 +108,66 @@ Thus, from the coefficients obtained from logit regression in null model and pro
 
 ### Question 3
 
+
+#### Part (a) 
+
+We begin by part A where we need to approach the problem from the standpoint of regression. When all the independent variables were plotted against the number of shares or the natural logarithm of number of shares, no linear relationships were visible. On executing several multiple regression models, an R2 of only 3% was obtained. Therefore, it was justified to try KNN regression or a non-parametric approach for the above. The lowest overall error rate was achieved by taking into account all the independent variables (without any transformations) excluding url. The overall error rate was around 0.41 or 41% with the optimal k value being equal to 5 and averaging it over 10 samples (could not do beyond time since it took unusually long to execute the code). A little higher than what would be expected but this was the rate that we were able to achieve after considering quite a few models with different combinations of the regressors and also different transformations (like squared variables and interaction variables). 
+
+The graph of the average estimate of the out-of-sample overall rate against the different values of k is shown as under: 
+
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/1_Confusion_matrix.png)
+
+(Note: k values upto 1000 were considered, however, the model only shows the values starting from k = 5 and going upto k = 100 with increments of 5. The other k values did not display a lower overall error rate than k =  5 and hence only that has been reported.)
+
+The confusion matrix for our model is as under:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph1.png)
 
+As can be confirmed from the table above, the overall error rate = 0.4116534 and the true positive rate = 0.7896974 and the false positive rate = 0.6165394.
+
+We now average the above quantities by running our model over 50 different subsamples of test and train data. On comparison with the null model, our model performed only slightly better. 
+
+The average overall error rate (final model) = 0.4104275
+The average true positive rate (final model) = 0.7993485
+The average false positive rate (final model) = 0.6145434
+
+The average overall error rate (null model) = 0.4929928
+
+#### Part (b) 
+
+
+Now we approach the problem by classifying the target variable and then implement a classification or a regression model.
+We resort to using the KNN classification as we achieved slightly better results than the logistic regression. This and the case above might be because the data points are way too many and extremely scattered. This makes it harder to trace out any pattern and thereby fit a parametric model. However, the drawback with this classification would be that it will be extremely sensitive to the value of k. We may obtain a different optimal k every time we run the model.
+
+The lowest overall error rate was achieved by taking into account all the independent variables (without any transformations) excluding url and two other variables (is_weekend and data_channel_is_socmed). The overall error rate was around 0.37 or 37% with the optimal k value being equal to 95 and averaging it over 5 samples (could not do beyond time since it took unusually long to execute the code). 
+
+The graph of the average estimate of the out-of-sample overall rate against the different values of k is shown as under: 
+
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/2_Confusion_matrix.png)
+
+The confusion matrix for our model is as under:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph2.png)
 
+As can be confirmed from the table above, the overall error rate = 0.3768445 and the true positive rate = 0.7386903 and the false positive rate = 0.4736482. The false positive rate has reduced substantially which is good and overall error rate is lower too. However, the true positive rate has declined.
 
-#### Conclusion: 
-The dataset with trim = 350 yields a larger optimal value of k because it has more observations than the dataset with trim = 65 AMG. The former has 416 observations while the latter has 292 observations. The optimal value of k is 68 for trim = 350 while the optimal value of k for trim = 65 AMG is 11, at least for the random sample that was drawn for this case.
+We now average the above quantities by running our model over 50 different subsamples of test and train data. 
+
+The average overall error rate (final model) = 0. 3746097
+The average true positive rate (final model) = 0.5956410
+The average false positive rate (final model) = 0.3455147
+
+We even ran a logit model for the second part of the question but the results were more or less similar to the part A estimates. However, the average required quantities are as under and are slightly better than the KNN regression in part A:
+
+The average overall error rate (final model) = 0.4067726
+The average true positive rate (final model) = 0.8017085
+The average false positive rate (final model) = 0.5964092
+
+As can be seen, we prefer the KNN classification model over the logit model.
+
+#### Conclusion
+
+We expect the threshold first and regress approach to do better as we can classify the target variable into the required classes (using KNN classification) or target it to achieve a value between 0 and 1 (using a logit model). Earlier, due to overall high variable and a very large n, we were trying to predict the average number of shares for a given set of values for the independent variables and thus harder to get a reasonable overall error rate. Also, due to a large number of variables and large number of oobservations, we were unable to find any patterns between the regressand and the regressors and thus, difficult to implement a linear model. However, the true positive rate is higher for the KNN regression in part A as compared to the KNN classification in part B. The overall error rate and the false positive rate are lower for the KNN classification model. The importance of true positive rate over the false positive rate and vice versa depends on the aim of the study.
+
 
 #### Submitted by: Hardik Gupta (hg8675) and Khushboo R Thakkar (kt24992)
