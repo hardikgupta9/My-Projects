@@ -28,13 +28,26 @@ We can see that the hand build model is much more efficient than the given mediu
 
 #### Part (b)
 
+Referring to part (a) we could see that the hand build model is more efficient than the medium2 model from the original script. Thus we will compare the KNN regression model with the hand build model here.
 
+Comparing the average Root mean square error for both the KNN model and hand-build model below:
+
+RMSE over one regression: 
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/KNN_RMSE.PNG)
+
+Average RMSE over 100 regressions:
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/KNN_RMSE_mean.PNG)
+
+Thus we can see that the average RMSE for the KNN model is still more than the hand build model in the part (a). 
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs_1_graph_HG.png)
 
+Based on the above graph we can see that the mean RMSE is minimum in KNN regression if the value of K is chosen below and around k=10.
+
 #### Conclusion: 
 
-Based on the 12 graphs above, We can see there are significant points in ggplots that represent the green building receiving rent less than normal buildings and also close to the mean rent of the cluster. Although in some cases such as class B cases there is more possibility of higher rent recovery from green buildings. Thus we cannot confidently conclude that the expectation of rent covered from a green building would be more than that of a normal building without any further information about the proposed building. Hence its uncertain whether investing in a green building will be worth it or not. 
 
 ### Question 2
 
