@@ -115,13 +115,13 @@ We begin by part A where we need to approach the problem from the standpoint of 
 
 The graph of the average estimate of the out-of-sample overall rate against the different values of k is shown as under: 
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/1_Confusion_matrix.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph1.png)
 
 (Note: k values upto 1000 were considered, however, the model only shows the values starting from k = 5 and going upto k = 100 with increments of 5. The other k values did not display a lower overall error rate than k =  5 and hence only that has been reported.)
 
 The confusion matrix for our model is as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph1.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_Confusion_matrix.png)
 
 As can be confirmed from the table above, the overall error rate = 0.4116534 and the true positive rate = 0.7896974 and the false positive rate = 0.6165394.
 
@@ -143,11 +143,11 @@ The lowest overall error rate was achieved by taking into account all the indepe
 
 The graph of the average estimate of the out-of-sample overall rate against the different values of k is shown as under: 
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/2_Confusion_matrix.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph2.png)
 
 The confusion matrix for our model is as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph2.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/2_Confusion_matrix.png)
 
 As can be confirmed from the table above, the overall error rate = 0.3768445 and the true positive rate = 0.7386903 and the false positive rate = 0.4736482. The false positive rate has reduced substantially which is good and overall error rate is lower too. However, the true positive rate has declined.
 
