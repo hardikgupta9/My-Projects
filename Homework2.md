@@ -1,4 +1,4 @@
-# Homework 1
+# Homework 2
 
 ### Question 1
 The question talks about a picture that produces a better apples-to-apples comparison. There are several variables that might affect the rent of a building namely: cluster, age, renovated, class, amenities, net, employment growth in area.
@@ -9,8 +9,8 @@ To further group this data we can conjecture that:
 
 And we have the following output
 
-![]("My-Projects/Qs_1_graph_HG.png")
-![]("My-Projects/1_A1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs_1_graph_HG.png)
+![](https://github.com/hardikgupta9/My-Projects/1_A1.PNG)
 ![]("My-Projects/test1.PNG")
 ![]("My-Projects/test1.PNG")
 ![]("My-Projects/test1.PNG")
@@ -37,27 +37,26 @@ results based on each radiologist's perception of risk. Now we calculate the pro
 risk perception. And the recall probability by each radiologist for all the patients have been plotted in the box-plot below. 
 
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Q2_plot.png)
 
 The above image clearly indicates that Radiologist89 is more conservative in recalling same set of patients.
 
 #### Part (b)
 
-We have taken the null model (from part (a))  where the radiologist percieves variables history , density, symptoms, menopause and age as
-important factor and attach weight as given below. 
+We have taken the null model (from part (a))  where the radiologist percieves variables history , density, symptoms, menopause and age as important factor and attach weight as given below. 
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Old_coef.PNG)
 
 
 However, we see from the model confusion matrix (explained below) that the above model is not efficient in fetching the information about the risk
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Confusion_out_1.PNG)
 
-Error is 8.1%.& TPR is 0% & FPR is 2.6% & FDR is 100%. 
+Out sample: Error is 8.1%.& TPR is 0% & FPR is 2.6% & FDR is 100%. 
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Confusion_in_1.PNG)
 
-Error is 5.1% & TPR is 11.53% & FPR is 2.3% & FDR is 85.7%
+In sample: Error is 5.1% & TPR is 11.53% & FPR is 2.3% & FDR is 85.7%
 
 This model might look accurate However looking at the TPR, FPR and FDR, we can conclude that the model compromises a lot on sensitivity,
 specificity and precision.
@@ -65,24 +64,24 @@ specificity and precision.
 Now we propose a new model where the radiologist percieves recall(previous mammograms), history, density and symptoms as
 important factor and attach weight as given below.
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Coefficients_part2.PNG)
 
 However, we see from the model confusion matrix (explained below) that the above model looks more efficient in fetching the information about the risk
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Confusion_out_2.PNG)
 
-Error is 16.24%.& TPR is 55.55% & FPR is 14.5% & FDR is 81%
+Out sample: Error is 16.24%.& TPR is 55.55% & FPR is 14.5% & FDR is 81%
 
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Confusion_in_2.PNG)
 
-Error is 13.8%. & TPR is 61.5% & FPR is 12.9% & FDR is 86%
+In sample: Error is 13.8%. & TPR is 61.5% & FPR is 12.9% & FDR is 86%
 
 This model might look slightly inaccurate when compared to the null model. However looking at the TPR, FPR and FDR, we can conclude that the model compensates on sensitivity,
 specificity and precision.
 
 #### Conclusion
 
-Thus
+Thus, from the coefficients obtained from logit regression in null model and proposed model, we need to see that the radiologist is attaching a lot of weight to the age factor, which we don't find in the efficient model to add significance. Also we could see that the recalled patient have a very high weighage of developing cancer. Thus the radiologists should weight it higher if someone has been recalled again for the mammography. Also in the proposed model the weightage of density and symptoms has also reduced. However the weightage of history almost similar. Thus we will reason that the coefficient of the proposed model tell us the weights attached to the different factors for a patient.
 
 ### Question 3
 
