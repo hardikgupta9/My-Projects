@@ -1,0 +1,572 @@
+# Question 1:
+
+library(tidyverse)
+library(mosaic)
+data(SaratogaHouses)
+
+summary(SaratogaHouses)
+
+# 11 medium model
+lm_medium = lm(price ~ . - sewer - waterfront - landValue - newConstruction, data=SaratogaHouses)
+
+# hand build model 
+lm_hand_build = lm(price ~ . - sewer + bedrooms*livingArea + bathrooms*livingArea , data=SaratogaHouses)
+
+coef(lm_medium)
+
+coef(lm_hand_build)
+
+####
+# Compare out-of-sample predictive performance
+####
+
+# Split into training and testing sets
+n = nrow(SaratogaHouses)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+saratoga_train = SaratogaHouses[train_cases,]
+saratoga_test = SaratogaHouses[test_cases,]
+	
+lm1 = lm(price ~ . - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
+lm2 = lm(price ~ (. - sewer + bedrooms*livingArea + bathrooms*livingArea), data=saratoga_train)
+
+# Predictions out of sample
+
+yhat_test1 = predict(lm1, saratoga_test)
+yhat_test2 = predict(lm2, saratoga_test)
+
+rmse = function(y, yhat) {
+  sqrt( mean( (y - yhat)^2 ) )
+}
+
+# Root mean-squared prediction error for medium model
+rmse(saratoga_test$price, yhat_test1)
+
+# Root mean-squared prediction error for hand-build model
+rmse(saratoga_test$price, yhat_test2)
+
+# easy averaging over train/test splits
+library(mosaic)
+
+rmse_vals = do(100)*{
+  
+  # re-split into train and test cases
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  saratoga_train = SaratogaHouses[train_cases,]
+  saratoga_test = SaratogaHouses[test_cases,]
+  
+  # fit to this training set
+  lm1 = lm(price ~ . - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
+  
+  lm2 = lm(price ~ (. - sewer + bedrooms*livingArea + bathrooms*livingArea), data=saratoga_train)
+  
+  
+  # predict on this testing set
+  yhat_test1 = predict(lm1, saratoga_test)
+  yhat_test2 = predict(lm2, saratoga_test)
+ 
+  
+  c(rmse(saratoga_test$price, yhat_test1),
+    rmse(saratoga_test$price, yhat_test2))
+}
+
+rmse_vals
+colMeans(rmse_vals)
+
+
+## Q1 part 2 starts here
+
+# constructing the training and test-set feature matrices
+
+Xtrain = model.matrix(~ . - (price + sewer + waterfront + landValue + newConstruction) - 1, data=saratoga_train)
+Xtest = model.matrix(~ . - (price + sewer + waterfront + landValue + newConstruction) - 1, data=saratoga_test)
+
+# training and testing set responses
+ytrain = saratoga_train$price
+ytest = saratoga_test$price
+
+# now rescale:
+scale_train = apply(Xtrain, 2, sd)  # calculate std dev for each column
+Xtilde_train = scale(Xtrain, scale = scale_train)
+Xtilde_test = scale(Xtest, scale = scale_train)  # use the training set scales!
+library(FNN)
+K = 10
+
+# fit the model
+knn_model = knn.reg(Xtilde_train, Xtilde_test, ytrain, k=K)
+
+# calculate test-set performance
+rmse(ytest, knn_model$pred)
+
+rmse(ytest, yhat_test2) #handbuild model rmse
+
+rmse_vals_2 = do(100)*{
+  
+  # re-split into train and test cases
+  n_train = round(0.8*n)  # round to nearest integer
+  n_test = n - n_train
+  train_cases = sample.int(n, n_train, replace=FALSE)
+  test_cases = setdiff(1:n, train_cases)
+  saratoga_train = SaratogaHouses[train_cases,]
+  saratoga_test = SaratogaHouses[test_cases,]
+  
+  
+  # hand build model
+  
+lm2 = lm(price ~ (. - sewer + bedrooms*livingArea + bathrooms*livingArea), data=saratoga_train)
+  
+  # fit to this training set
+  
+  Xtrain = model.matrix(~ . - (price + sewer + waterfront + landValue + newConstruction) - 1, data=saratoga_train)
+  Xtest = model.matrix(~ . - (price + sewer + waterfront + landValue + newConstruction) - 1, data=saratoga_test)
+  
+  # training and testing set responses
+  ytrain = saratoga_train$price
+  ytest = saratoga_test$price
+  
+  # now rescale:
+  scale_train = apply(Xtrain, 2, sd)  # calculate std dev for each column
+  Xtilde_train = scale(Xtrain, scale = scale_train)
+  Xtilde_test = scale(Xtest, scale = scale_train)  # use the training set scales!
+  library(FNN)
+  K = 10
+  
+  # Hand build prediction
+  yhat_test2 = predict(lm2, saratoga_test)
+  
+  # fit the model
+  knn_model = knn.reg(Xtilde_train, Xtilde_test, ytrain, k=K)
+  
+  # calculate test-set performance
+  rmse(ytest, knn_model$pred)
+  
+  rmse(ytest, yhat_test2)
+  
+  
+  c(rmse(ytest, knn_model$pred),
+    rmse(ytest, yhat_test2))
+}
+
+rmse_vals_2
+colMeans(rmse_vals_2)
+library(foreach)
+
+k_grid = exp(seq(log(2), log(300), length=100)) %>% round %>% unique
+rmse_grid = foreach(K = k_grid, .combine='c') %do% {
+  knn_model = knn.reg(Xtilde_train, Xtilde_test, ytrain, k=K)
+  rmse(ytest, knn_model$pred)
+}
+
+plot(k_grid, rmse_grid, log='x', main="Average estimate of out-of-sample RMSE for different values of k", xlab="k", ylab="Average of out-of-sample RMSE")
+
+#-------------------------------------------------------------------------------------------
+
+# Question 2:
+
+library(tidyverse)
+library(mosaic)
+
+# Question 2 part A starts
+
+hos = read.csv("~/Downloads/ECO395M-master-2/data/brca.csv")
+# names of radiologists
+a = unique(hos$radiologist)
+
+show(a)
+
+# subset to find the logit regression for different radiologists  
+radio13 =subset(hos, radiologist == "radiologist13" )
+radio34 =subset(hos, radiologist == "radiologist34" )
+radio66 =subset(hos, radiologist == "radiologist66" )
+radio89 =subset(hos, radiologist == "radiologist89" )
+radio95 =subset(hos, radiologist == "radiologist95" )
+
+# removing the radiologist variables from the subset since it already specifies th radiologist
+
+radio13$radiologist <- NULL
+radio34$radiologist <- NULL
+radio66$radiologist <- NULL
+radio89$radiologist <- NULL
+radio95$radiologist <- NULL
+
+# regression to understand the perception of different radiologist to recall or not
+prob13 = glm(recall ~ . -cancer, data=hos, family=binomial)
+prob34 = glm(recall ~ . -cancer, data=radio34, family=binomial)
+prob66 = glm(recall ~ . -cancer, data=radio66, family=binomial)
+prob89 = glm(recall ~ . -cancer, data=radio89, family=binomial)
+prob95 = glm(recall ~ . -cancer, data=radio95, family=binomial)
+
+coef(prob13)
+coef(prob34)
+coef(prob66)
+coef(prob89)
+coef(prob95)
+
+# predicting the probability to call(by each radiologist) each patient in the original dataset
+phat13 = predict(prob13, hos, type='response')
+phat34 = predict(prob34, hos, type='response')
+phat66 = predict(prob66, hos, type='response')
+phat89 = predict(prob89, hos, type='response')
+phat95 = predict(prob95, hos, type='response')
+
+# adding another column to the data set hos
+hos$pred_prob13=phat13
+hos$pred_prob34=phat34
+hos$pred_prob66=phat66
+hos$pred_prob89=phat89
+hos$pred_prob95=phat95
+
+
+# this boxplot signifies the distribution of probability
+# according to the radiologist for all
+
+boxplot(phat13, phat34, phat66, phat89,phat95,
+        main = "Recall probability for all the patients",
+        names = c("Radio13", "Radio34", "Radio66", "Radio89","Radio95"),
+        xlab= "Probability to recall",
+        las = 1, 
+        col = "orange",
+        border = "brown",
+        horizontal = TRUE,
+        notch = TRUE
+)
+# We can see in the boxplot that the probability of calling patients is maximum for radiologist89.
+# Thus radiologist89 is the most clinically conservative 
+
+# Question 2 Part A ends
+
+# Question 2 Part B Starts
+
+prob1 = glm(cancer ~ history + density + symptoms + menopause + age , data=hos)
+prob2 = glm(cancer ~ recall + history + density + symptoms , data=hos)
+
+n = nrow(hos)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+hos_train = hos[train_cases,]
+hos_test = hos[test_cases,]
+
+# prob_1 is currently used by radiologists to judge cancer probability
+prob_1 = glm(cancer ~  history + density + symptoms + menopause + age , data=hos_train)
+
+# prob_2 is what I propose gives us best results
+prob_2 = glm(cancer ~ recall + history + density + symptoms, data=hos_train)
+
+
+phat_test1 = predict(prob_1, hos_test, type='response')
+yhat_test1 = ifelse(phat_test1> 0.1, 1, 0)
+confusion_out1 = table(y = hos_test$cancer,yhat_test1)
+confusion_out1
+# Error is 8.1%.& TPR is 0% & FPR is 2.6% & FDR is 100%
+
+phat_train1 = predict(prob_1, hos_train, type='response')
+yhat_train1 = ifelse(phat_train1 > 0.1, 1, 0)
+confusion_in1 = table(y = hos_train$cancer,yhat_train1)
+confusion_in1
+# Error is 5.1% & TPR is 11.53% & FPR is 2.3% & FDR is 85.7%
+
+
+phat_test2 = predict(prob_2, hos_test, type='response')
+yhat_test2 = ifelse(phat_test2> 0.1, 1, 0)
+confusion_out2 = table(y = hos_test$cancer,yhat_test2)
+confusion_out2
+# Error is 16.24%.& TPR is 55.55% & FPR is 14.5% & FDR is 81%
+
+phat_train2 = predict(prob_2, hos_train, type='response')
+yhat_train2 = ifelse(phat_train2 > 0.1, 1, 0)
+confusion_in2 = table(y = hos_train$cancer,yhat_train2)
+confusion_in2
+# Error is 13.8%. & TPR is 61.5% & FPR is 12.9% & FDR is 86%
+
+
+# Thus we can see that the model two is giving more accurate results. Hence we will use model two
+# Older weights attached to different factors
+coef(prob1)
+
+# Hence using the second model for this and thus propose to use the weights to different factors in this way
+coef(prob2)
+
+
+#-------------------------------------------------------------------------------------------
+
+# Question 3:
+
+# Part A: Regress first and threshold second
+
+# Attempt to fit a KNN regression model to the data
+
+library(tidyverse)
+library(mosaic)
+library(FNN)
+library(foreach)
+
+sh = read.csv("~/Downloads/ECO395M-master-2/data/online_news.csv")
+summary(sh)
+
+# Defining the X matrix which includes all variables except for url
+
+X = model.matrix(~ . - url - 1, data=sh)
+y = sh$shares
+
+N = nrow(sh)
+N
+N_train = floor(0.8*N)
+N_test = N - N_train
+
+# Trying to find the optimal k for the KNN regression model (Repeated only 5 times as the process was extremely time-consuming given the number of observations and the different k values as considered below)
+
+k_grid = seq(5,100, by=5)
+err_grid = foreach(k = k_grid, .combine='c') %do% {
+out = do(10)*{
+train_ind = sample.int(N, N_train)
+X_train = X[train_ind,]
+X_test = X[-train_ind,]
+y_train = y[train_ind]
+y_test = y[-train_ind]
+    
+# scale the training set features
+scale_factors = apply(X_train, 2, sd)
+X_train_sc = scale(X_train, scale=scale_factors)
+    
+# scale the test set features using the same scale factors
+X_test_sc = scale(X_test, scale=scale_factors)
+    
+# Fit KNN models (over k values as described by k_grid)
+knn_try = knn.reg(X_train_sc, X_test_sc, y_train, k=k)
+
+# Predicting shares based on the KNN model
+ypred = knn_try$pred
+    
+# Classifying ypred into viral = 1 and not viral = 0 and same with actual test values and then calculating the confusion matrix
+
+ypviral = ifelse(ypred > 1400, "1", "0")
+
+yviral = ifelse(y_test > 1400, "1", "0")
+
+confusion_matrix = table(yviral, ypviral)
+confusion_matrix
+# overall error rate
+1-sum(diag(confusion_matrix))/length(y_test)
+} 
+mean(out$result)
+}
+
+# graph of the average estimate of the overall error rate for different k-values
+plot(k_grid, err_grid, main="Average estimate of out-of-sample overall error rate for different values of k", xlab="k", ylab="Average of out-of-sample error")
+
+# k = 5 seems to be the optimal k. I re-run the model 50 times in order to derive the confusion matrix with the overall error rate, true positive error and false positive error that are averaged out over the test set data
+
+train_ind = sample.int(N, N_train)
+X_train = X[train_ind,]
+X_test = X[-train_ind,]
+y_train = y[train_ind]
+y_test = y[-train_ind]
+    
+scale_factors = apply(X_train, 2, sd)
+X_train_sc = scale(X_train, scale=scale_factors)
+    
+X_test_sc = scale(X_test, scale=scale_factors)
+    
+knn_try = knn.reg(X_train_sc, X_test_sc, y_train, k=5)
+
+ypred = knn_try$pred
+    
+ypviral = ifelse(ypred > 1400, "1", "0")
+
+yviral = ifelse(y_test > 1400, "1", "0")
+
+cmb = table(yviral, ypviral)
+cmb
+# overall error rate
+e = 1-sum(diag(cmb))/length(y_test)
+e
+tp = cmb[2,2]/{cmb[2,1] + cmb[2,2]}
+fp = cmb[1,2]/{cmb[1,1] + cmb[1,2]}
+tp
+fp
+
+
+# We now try to average over multiple sapmles and find the average of the above errors/rates
+
+confusion_matrix1 = do(50)*{
+
+train_ind = sample.int(N, N_train)
+X_train = X[train_ind,]
+X_test = X[-train_ind,]
+y_train = y[train_ind]
+y_test = y[-train_ind]
+  
+# scale the training set features
+scale_factors = apply(X_train, 2, sd)
+X_train_sc = scale(X_train, scale=scale_factors)
+  
+# scale the test set features using the same scale factors
+X_test_sc = scale(X_test, scale=scale_factors)
+  
+# Fit two KNN models (notice the odd values of K)
+knn_try = knn.reg(X_train_sc, X_test_sc, y_train, k=5)
+  
+# Predicting shares based on the KNN model
+  
+ypred = knn_try$pred
+  
+# Classifying ypred into viral = 1 and not viral = 0 and same with actual test values and then calculating the confusion matrix
+  
+ypviral = ifelse(ypred > 1400, "1", "0")
+  
+yviral = ifelse(y_test > 1400, "1", "0")
+
+ypnull = ifelse(ypred > 1400, "0", "0")
+  
+cm1 = table(yviral, ypviral)
+
+cm2 = table(yviral, ypnull)
+
+tp1 = cm1[2,2]/{cm1[2,1] + cm1[2,2]}
+fp1 = cm1[1,2]/{cm1[1,1] + cm1[1,2]}
+overall_error1 = 1-sum(diag(cm1))/length(y_test)
+overall_error2 = 1-sum(diag(cm2))/length(y_test)
+
+c(tp1, fp1, overall_error1, overall_error2)
+}
+colMeans(confusion_matrix1)
+
+# The average overall error rate (final model) = 0.4104275
+# The average true positive rate (final model) = 0.7993485
+# The average false positive rate (final model) = 0.6145434
+
+# Comparison with the null model that always predicts none of the shares go viral 
+
+# The average overall error rate (null model) = 0.4929928
+
+# Our model performs better than the null model but only slightly. We did not execute any linear models since linear relationships between the dependent variable and independent variables were not evident. 
+
+# Part B: Threshold first and regress/classify second
+
+# We use KNN classification after classifying the number of shares as 'viral = 1' and 'not viral = 0'
+
+sh$shviral = ifelse(sh$shares > 1400, "1", "0")
+sh$shviral1 = as.numeric(sh$shviral)
+
+X = dplyr::select(sh, n_tokens_title, n_tokens_content, num_hrefs, num_self_hrefs, num_imgs, num_videos, average_token_length, num_keywords, data_channel_is_lifestyle, data_channel_is_entertainment, data_channel_is_bus, data_channel_is_tech, data_channel_is_world, self_reference_min_shares, self_reference_max_shares, self_reference_avg_sharess, weekday_is_monday, weekday_is_tuesday, weekday_is_wednesday, weekday_is_thursday, weekday_is_friday, weekday_is_saturday, weekday_is_sunday, global_rate_positive_words, global_rate_negative_words, avg_positive_polarity, min_positive_polarity, max_positive_polarity, avg_negative_polarity, min_negative_polarity, max_negative_polarity, title_subjectivity, title_sentiment_polarity, abs_title_sentiment_polarity)
+
+y = sh$shviral1
+n = length(y)
+
+n_train = round(0.8*n)
+n_test = n - n_train
+
+k_grid = seq(100, 500, by=50)
+err_grid = foreach(k = k_grid,  .combine='c') %do% {
+out = do(5)*{
+train_ind = sample.int(n, n_train)
+X_train = X[train_ind,]
+X_test = X[-train_ind,]
+y_train = y[train_ind]
+y_test = y[-train_ind]
+
+scale_factors = apply(X_train, 2, sd)
+X_train_sc = scale(X_train, scale=scale_factors)
+X_test_sc = scale(X_test, scale=scale_factors)
+
+knn_cla = class::knn(train=X_train_sc, test= X_test_sc, cl=y_train, k=k)
+
+table(knn_cla, y_test)
+sum(knn_cla != y_test)/n_test
+} 
+  mean(out$result)
+}
+
+plot(k_grid, err_grid, main="Average estimate of out-of-sample classification error for different values of k", xlab="k", ylab="Average of out-of-sample error")
+
+# We now only run the classification with the optimal value of k and try to ascertain the average rates and errors required for comparison with the above model
+
+train_ind = sample.int(N, N_train)
+X_train = X[train_ind,]
+X_test = X[-train_ind,]
+y_train = y[train_ind]
+y_test = y[-train_ind]
+  
+scale_factors = apply(X_train, 2, sd)
+X_train_sc = scale(X_train, scale=scale_factors)
+  
+X_test_sc = scale(X_test, scale=scale_factors)
+
+knn_cla = class::knn(train=X_train_sc, test= X_test_sc, cl=y_train, k=95)
+
+cm3 = table(y_test, knn_cla)
+cm3
+tp3 = cm3[2,2]/{cm1[2,1] + cm3[2,2]}
+fp3 = cm3[1,2]/{cm1[1,1] + cm3[1,2]}
+overall_error3 = 1-sum(diag(cm3))/length(y_test)
+tp3
+fp3
+overall_error3
+
+# We now try to average over multiple sapmles and find the average of the above errors/rates
+
+confusion_matrix3 = do(50)*{
+
+train_ind = sample.int(N, N_train)
+X_train = X[train_ind,]
+X_test = X[-train_ind,]
+y_train = y[train_ind]
+y_test = y[-train_ind]
+  
+scale_factors = apply(X_train, 2, sd)
+X_train_sc = scale(X_train, scale=scale_factors)
+X_test_sc = scale(X_test, scale=scale_factors)
+  
+knn_cla = class::knn(train=X_train_sc, test= X_test_sc, cl=y_train, k=95)
+
+cm4 = table(y_test, knn_cla)
+
+tp11 = cm4[2,2]/{cm4[2,1] + cm4[2,2]}
+fp11 = cm4[1,2]/{cm4[1,1] + cm4[1,2]}
+overall_error11 = 1-sum(diag(cm4))/length(y_test)
+
+c(tp11, fp11, overall_error11)
+}
+colMeans(confusion_matrix3)
+
+# We even tried running a logit regression and the model with the lowest error rate is as under:
+
+confusion_matrix22 = do(50)*{
+
+n = nrow(sh)
+n_train = round(0.8*n)  # round to nearest integer
+n_test = n - n_train
+length(sh_test$shviral)
+train_cases = sample.int(n, n_train, replace=FALSE)
+test_cases = setdiff(1:n, train_cases)
+sh_train = sh[train_cases,]
+sh_test = sh[test_cases,]
+  
+# scale the training set features
+lm1 = glm(shviral1 ~ num_imgs + num_videos + poly(n_tokens_title, 2) + poly(num_hrefs, 2) + poly(num_self_hrefs, 2) + poly(n_tokens_content, 2) + poly(average_token_length, 2) + poly(num_keywords, 2) + poly(self_reference_min_shares, 3) + poly(self_reference_max_shares, 3) + poly(self_reference_avg_sharess, 2) + weekday_is_monday + weekday_is_tuesday + weekday_is_wednesday + weekday_is_thursday + weekday_is_friday +  + poly(max_positive_polarity, 2) + poly(max_negative_polarity, 3) + poly(avg_negative_polarity, 3) + poly(avg_positive_polarity, 2) + poly(min_positive_polarity, 2) + poly(min_negative_polarity, 3) + data_channel_is_lifestyle + data_channel_is_entertainment + data_channel_is_bus + data_channel_is_tech + data_channel_is_world + poly(global_rate_positive_words, 3) + poly(global_rate_negative_words, 3) + poly(title_subjectivity, 2) + poly(title_sentiment_polarity, 3) + abs_title_sentiment_polarity, data=sh_train, family=binomial)
+  
+yhat1 = predict(lm1, sh_test)
+yhat_test1 = ifelse(yhat1 > 0.5, 1, 0)
+
+cm23 = table(y = sh_test$shviral1, yhat = yhat_test1)
+  
+tp = cm23[2,2]/{cm[2,1] + cm23[2,2]}
+fp = cm23[1,2]/{cm[1,1] + cm23[1,2]}
+overall_error = 1-{sum(diag(cm23))/length(sh_test$shviral)}
+
+c(tp, fp, overall_error)
+}
+
+colMeans(confusion_matrix22)
+
+# The average required quantities are as under and are slightly better than the KNN regression in part A
+
+# We expect the threshold first and regress approach to do better as we can classify the target variable into the required classes (using KNN classification) or target it to achieve a value between 0 and 1 (using a logit model). Earlier, due to overall high variable and a very large n, we were trying to predict the average number of shares for a given set of values for the independent variables and thus harder to get a reasonable overall error rate. Also, due to a large number of variables and large number of oobservations, we were unable to find any patterns between the regressand and the regressors and thus, difficult to implement a linear model. However, the true positive rate is higher for the KNN regression in part A as compared to the KNN classification in part B. The overall error rate and the false positive rate are lower for the KNN classification model. The importance of true positive rate over the false positive rate and vice versa depends on the aim of the study. 
+
