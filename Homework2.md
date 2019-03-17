@@ -1,26 +1,36 @@
 # Homework 2
 
 ### Question 1
-The question talks about a picture that produces a better apples-to-apples comparison. There are several variables that might affect the rent of a building namely: cluster, age, renovated, class, amenities, net, employment growth in area.
-To further group this data we can conjecture that:
-1) For a particular building accounting for the cluster, we can account for amenities, average rent and employment growth in that area. And since there are quite a lot of values of cluster we’ll take it on x-axis.
-2) For a particular building accounting for the class, we can account for age and renovation criteria since overall quality of the building is evaluated by class variable. Thus we will prepare graph for every class. 
-3) Also we know that the rent might become biased based on whether the rent includes utility cost or not thus we will take the net=1 buildings separately and net=0 in another graph. 
 
-And we have the following output
+#### Part (a)
+Referring to the starter script here "saratoga_lm.R", we have taken the medium2 model as the medium model to benchmark the performance of the hand build model. 
+
+The medium model takes into account lotSize, age, livingArea, pctCollege, bedrooms, fireplaces, bathrooms, rooms, heating, fuel and  centralAir.The coefficients and weightage for the medium model has been described as following:
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_m.PNG)
+
+The hand-build model takes into account lotSize, age,landValue, livingArea, pctCollege, bedrooms, fireplaces, bathrooms, rooms, heating, fuel,waterfront, newConstruction,  centralAir and interaction terms between livingArea and bedroom AND livingarea and bathroom .The coefficients of the hand-build model has been described as below:
+
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_h.PNG)
+
+Comparing the average Root mean square error for both the medium and hand-build model below:
+
+RMSE over one regression: 
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/RMSE.PNG)
+
+Average RMSE over 100 regressions:
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Mean_RMSE.PNG)
+
+We can see that the hand build model is much more efficient than the given medium model in the original script.
+
+#### Part (b)
+
+
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs_1_graph_HG.png)
-![](https://github.com/hardikgupta9/My-Projects/1_A1.PNG)
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
 
 #### Conclusion: 
 
