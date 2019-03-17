@@ -108,24 +108,14 @@ Thus, from the coefficients obtained from logit regression in null model and pro
 
 ### Question 3
 
-Started with segregating the data into two datasets with two different trims (trim = 350 and trim = 65 AMG). Have run K-nearest-neighbours, made predictions and calculated out of sample RMSE for many different values of K and plotted the required results. 
+![](https://github.com/hardikgupta9/My-Projects/blob/master/1_Confusion_matrix.png)
 
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph1.png)
 
-##### Optimal k = 68 for trim 350
+![](https://github.com/hardikgupta9/My-Projects/blob/master/2_Confusion_matrix.png)
 
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
-![]("My-Projects/test1.PNG")
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Qs3Graph2.png)
+
 
 #### Conclusion: 
 The dataset with trim = 350 yields a larger optimal value of k because it has more observations than the dataset with trim = 65 AMG. The former has 416 observations while the latter has 292 observations. The optimal value of k is 68 for trim = 350 while the optimal value of k for trim = 65 AMG is 11, at least for the random sample that was drawn for this case.
