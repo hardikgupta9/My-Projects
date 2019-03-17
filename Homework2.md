@@ -66,7 +66,7 @@ risk perception. And the recall probability by each radiologist for all the pati
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/Q2_plot.png)
 
-The above image clearly indicates that Radiologist89 is more conservative in recalling same set of patients.
+As we can see in the above graph Radiologist89 is more likely to recall the patients. Hence we can conclude that Radiologist89 is more conservative in recalling same set of patients.
 
 #### Part (b)
 
