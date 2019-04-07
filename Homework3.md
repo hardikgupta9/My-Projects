@@ -77,7 +77,7 @@ Also the coefficients for the OLS performed are as following:
 
  Looking at the coefficients we can say that
 
-1. Green rating effect on rent is same for different size of buildings
+1. Since size has a very less impact on Rent per square foot, Green rating effect on rent can be considered negligible for different size of buildings.
 
 2. Green rating effect on rent is slightly different for different cluster, age and stories of building.
 
