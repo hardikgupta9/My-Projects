@@ -44,6 +44,10 @@ We further explored the Mean squared Error for the Lasso regression which gave t
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/mse_las_best.PNG)
 
+For choosing optimal lambda, we got the following graph:
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/lamb.PNG)
+
 Thus the proposed model with least MSE will be following (OLS)
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/coef_ols.PNG)
