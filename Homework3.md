@@ -7,11 +7,11 @@ We first used a null model by using seemingly relevant dependent variables such 
 
 We calculated the Mean squared Error for the OLS regression and Ridge regression and got the following output for null model:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/__.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/MSE_or_null.PNG)
 
 We further explored the Mean squared Error for the Lasso regression which gave the following value for null model.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_h.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/mse_las_null.PNG)
 
 To further improvise on the model we experimented with different combinations of variabes to calculate the expected rent per unit size. 
 And we land up using variables such as: cluster_rent, size,  empl_gr, leasing_rate,  stories, age, renovated, class_a, class_b,
@@ -26,27 +26,27 @@ the total days where the tenant might save on the utility thus would not care ab
 
 We got the following coefficients for OLS regression on the proposed model:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/__.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/coef_ols.PNG)
 
 We got the following coefficients for Ridge regression on the proposed model:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/__.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/coef_ridge.PNG)
 
 We got the following coefficients for Lasso regression on the proposed model:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/__.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/coef_lasso.PNG	)
 
 We calculated the Mean squared Error for the OLS regression and Ridge regression and got the following output for proposed model:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/__.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/MSE_best_or.PNG)
 
 We further explored the Mean squared Error for the Lasso regression which gave the following value for proposed model.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_h.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/mse_las_best.PNG)
 
 Thus the proposed model with least MSE will be following (OLS)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_h.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/coef_ols.PNG)
 
 #### Part (b)
 By looking at the coefficients we can say that the Rent per square foot increases by $ 0.635 with green rated building keeping other things constant.
@@ -67,14 +67,13 @@ gr_stories = gb$green_rating*gb$stories
 
 gr_age = gb$green_rating*gb$age
 
-After running the OLS regression we got the following MSE for the regression performed. Thus we can say that this model is equally efficient
-to the proposed model in part(a).
+After running the OLS regression we got the following MSE for the regression performed. Thus we can say that this model is equally efficient to the proposed model in part(a).
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_h.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/mse_ols3.PNG)
 
 Also the coefficients for the OLS performed are as following:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/Coeff_Q1_a_h.PNG)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/coef3.PNG)
 
  Looking at the coefficients we can say that
 
