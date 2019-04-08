@@ -1,0 +1,150 @@
+library(tidyverse)
+library(mosaic)
+
+# Question 1 part A starts
+
+gb = read.csv("D:/MA.ECON/Data mining & Stat learning/Ass3/greenbuildings.csv")
+gb <- na.omit(gb)
+n = nrow(gb)
+
+library(glmnet)
+## Null model
+gbxnull = model.matrix(Rent ~ cluster_rent + size + age + renovated + class_a + amenities, data=gb)[,-1]
+
+gbynull = gb$Rent
+
+lambda_null <- 10^seq(10, -2, length = 100)
+#OLS
+gblm_null <- lm(Rent ~ cluster_rent + size + age + renovated + class_a + amenities, data = gb)
+coef(gblm_null)
+
+#ridge
+ridgen.mod <- glmnet(gbxnull, gbynull, alpha = 0, lambda = lambda_null)
+
+gblm_null <- lm(Rent ~ cluster_rent + size + age + renovated + class_a + amenities, data = gb)
+ridgen.mod <- glmnet(gbxnull, gbynull, alpha = 0, lambda = lambda_null)
+#find the best lambda from our list via cross-validation
+cvn.out <- cv.glmnet(gbxnull, gbynull, alpha = 0)
+
+bestlam_null <- cvn.out$lambda_null.min
+
+ridgen.pred <- predict(ridgen.mod, s = bestlam_null, newx = gbxnull)
+sn.pred <- predict(gblm_null, newdata = gb)
+#MSE for OLS
+mean((sn.pred-gb$Rent)^2)
+# MSE for Ridge
+mean((ridgen.pred-gb$Rent)^2)
+
+# OLS performs better
+
+outnull = glmnet(gbxnull,gbynull,alpha = 0)
+#coefficients of Ridge
+predict(ridgen.mod, type = "coefficients", s = bestlam_null)[1:7,]
+
+#lasso regression
+
+lasson.mod <- glmnet(gbxnull, gbynull, alpha = 1, lambda = lambda_null)
+lasson.pred <- predict(lasson.mod, s = bestlam_null, newx = gbxnull)
+# MSE for lasso
+mean((lasson.pred-gb$Rent)^2)
+
+#coefficients of Lasso
+predict(lasson.mod, type = "coefficients", s = bestlam_null)[1:7,]
+
+## Thus OLS performs better here..
+## Null model ends here
+
+## Best model starts
+
+gbx = model.matrix(Rent ~ cluster_rent + size + empl_gr + leasing_rate + stories + age + renovated + class_a + class_b + green_rating + amenities + total_dd_07 + Precipitation, data=gb)[,-1]
+
+gby = gb$Rent
+
+lambda <- 10^seq(10, -2, length = 100)
+#OLS
+gblm <- lm(Rent ~ cluster_rent + size + empl_gr + leasing_rate + stories + age + renovated + class_a + class_b + green_rating + amenities + total_dd_07 + Precipitation, data = gb)
+coef(gblm)
+
+#ridge
+ridge.mod <- glmnet(gbx, gby, alpha = 0, lambda = lambda)
+
+gblm <- lm(Rent ~ cluster_rent + size + empl_gr + leasing_rate + stories + age + renovated + class_a + class_b + green_rating + amenities + total_dd_07 + Precipitation, data = gb)
+ridge.mod <- glmnet(gbx, gby, alpha = 0, lambda = lambda)
+#find the best lambda from our list via cross-validation
+cv.out <- cv.glmnet(gbx, gby, alpha = 0)
+
+
+plot(cv.out, bty="n")
+
+bestlam <- cv.out$lambda.min
+
+ridge.pred <- predict(ridge.mod, s = bestlam, newx = gbx)
+s.pred <- predict(gblm, newdata = gb)
+#MSE for OLS
+mean((s.pred-gb$Rent)^2)
+# MSE for Ridge
+mean((ridge.pred-gb$Rent)^2)
+
+# OLS performs better
+
+out = glmnet(gbx,gby,alpha = 0)
+#coefficients of Ridge
+predict(ridge.mod, type = "coefficients", s = bestlam)[1:14,]
+
+#lasso regression
+
+lasso.mod <- glmnet(gbx, gby, alpha = 1, lambda = lambda)
+lasso.pred <- predict(lasso.mod, s = bestlam, newx = gbx)
+# MSE for lasso
+mean((lasso.pred-gb$Rent)^2)
+
+#coefficients of Lasso
+predict(lasso.mod, type = "coefficients", s = bestlam)[1:14,]
+
+## thus OLS in this case performs better than any Ridge and Lasso
+
+## and the best model is given by the following coefficients for OLS regression
+
+coef(gblm)
+
+
+## Part (b)
+
+
+## By looking at the coefficients we can say that the Rent 
+## square foot increases by $ 0.635 with green rated building keeping other things constant
+
+## Part(c)
+
+## Since OLS gives us the best response we will in this case use OLS for predicting the rent
+
+gr_clsa = gb$green_rating*gb$class_a
+
+gr_clsb = gb$green_rating*gb$class_b
+
+gr_clrent = gb$green_rating*gb$cluster_rent
+
+gr_size = gb$green_rating*gb$size
+
+gr_stories = gb$green_rating*gb$stories
+
+gr_age = gb$green_rating*gb$age
+
+gblm3 <- lm(Rent ~ cluster_rent + size + stories + renovated + class_a + class_b + green_rating + amenities + Precipitation + gr_clsa + gr_clsb + gr_clrent, data = gb)
+
+s3.pred <- predict(gblm3, newdata = gb)
+
+mean((s3.pred-gb$Rent)^2)
+# This shows that this model is best till now we have evaluated
+
+## Coefficients of linear 
+coef(gblm3)
+
+summary(gblm3)
+# Looking at the coefficients we can say that
+
+# green rating effect is same for diff. size 
+
+# green rating effect is minutely different for different cluster, age and stories
+
+# green rating effect is significantly different fordifferent class of buildings
