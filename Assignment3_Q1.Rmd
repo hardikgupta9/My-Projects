@@ -124,27 +124,14 @@ gr_clsb = gb$green_rating*gb$class_b
 
 gr_clrent = gb$green_rating*gb$cluster_rent
 
-gr_size = gb$green_rating*gb$size
-
-gr_stories = gb$green_rating*gb$stories
-
-gr_age = gb$green_rating*gb$age
-
-gblm3 <- lm(Rent ~ cluster_rent + size + stories + renovated + class_a + class_b + green_rating + amenities + Precipitation + gr_clsa + gr_clsb + gr_clrent, data = gb)
+gblm3 <- lm(Rent ~ cluster_rent + size + stories+ renovated + class_a + class_b + green_rating + amenities + Precipitation + gr_clsa + gr_clsb + gr_clrent , data = gb)
 
 s3.pred <- predict(gblm3, newdata = gb)
 
 mean((s3.pred-gb$Rent)^2)
-# This shows that this model is best till now we have evaluated
+# This shows that this model is the best till now amongst the ones we have evaluated
 
 ## Coefficients of linear 
 coef(gblm3)
 
 summary(gblm3)
-# Looking at the coefficients we can say that
-
-# green rating effect is same for diff. size 
-
-# green rating effect is minutely different for different cluster, age and stories
-
-# green rating effect is significantly different fordifferent class of buildings
