@@ -57,7 +57,7 @@ By looking at the coefficients we can say that the Rent per square foot increase
 
 #### Part (c)
 
-We first propose the following interactive terms in our proposed model in part(a):
+We first propose the following interactive terms in a new model using :cluster_rent, size, stories, renovated, class_a, class_b , green_rating, amenities, Precipitation and interaction variables as mentioned below. 
 
 gr_clsa = gb$green_rating*gb$class_a
 
@@ -65,11 +65,6 @@ gr_clsb = gb$green_rating*gb$class_b
 
 gr_clrent = gb$green_rating*gb$cluster_rent
 
-gr_size = gb$green_rating*gb$size
-
-gr_stories = gb$green_rating*gb$stories
-
-gr_age = gb$green_rating*gb$age
 
 After running the OLS regression we got the following MSE for the regression performed. Thus we can say that this model is equally efficient to the proposed model in part(a).
 
@@ -79,14 +74,17 @@ Also the coefficients for the OLS performed are as following:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/coef3.PNG)
 
+To check the statistical signifinace we further check the summary for the above mentioned regression as below:
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/summary3.PNG)
+
  Looking at the coefficients we can say that
 
-1. Since size has a very less impact on Rent per square foot, Green rating effect on rent can be considered negligible for different size of buildings.
+1. Green rating effect on class a and class b building is high but insignificant
 
-2. Green rating effect on rent is slightly different for different cluster, age and stories of building.
+3. Green rating effect on various clusters( determined by cluster rent) is less but statisticall significant.
 
-3. Green rating effect on rent is significantly different for different classes of buildings.
-
+Please note that the above mentioned model has been built using statistically significant variables. 
 
 ### Question 2
 
