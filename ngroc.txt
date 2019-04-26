@@ -1,0 +1,8 @@
+       ID                    items      
+ Min.   :   1   whole milk      : 2513  
+ 1st Qu.:2456   other vegetables: 1903  
+ Median :4828   rolls/buns      : 1809  
+ Mean   :4909   soda            : 1715  
+ 3rd Qu.:7380   yogurt          : 1372  
+ Max.   :9835   bottled water   : 1087  
+                (Other)         :32968  
