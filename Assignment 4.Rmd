@@ -1,0 +1,744 @@
+# ASSIGNMENT 4
+
+# QUESTION 1 
+
+wn = read.csv("~/Downloads/ECO395M-master-3/data/wine.csv")
+summary(wn)
+library(tidyverse)
+library(corrplot)
+library(factoextra)
+library(LICORS)
+library(mosaic)
+library(foreach)
+library(cluster)
+library(flexclust)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(wesanderson)
+
+# We see high positive correlation between free sulphur dioxide and total sulphur dioxide as expected; high positive correlation between residual sugar and density and also between residual sugar and total sulphur dioxide; high negative correlation between density and alcohol
+
+cormat <- cor(wn[c(1:11)])
+corrplot(cormat, method = 'shade',type = 'upper')
+
+wn_scaled <- scale(wn[,1:11], center=TRUE, scale=TRUE)
+
+# Principal Component Analysis
+
+pc_wn = prcomp(wn_scaled)
+
+summary(pc_wn)
+
+# PC1 explains 27.5% of the variation and PC2 explains 22.7% while PC3 explains another 14% of the total proportion of the variance
+
+# Plotting the scree plot and the cumulative variance plot
+
+pve = 100*pc_wn$sdev^2/sum(pc_wn$sdev^2)
+par(mfrow=c(1,2))
+plot(pve, type="o", ylab="PVE", xlab="Principal Component", col =" blue ")
+plot(cumsum(pve), type="o", ylab="Cumulative PVE", xlab="Principal Component", col =" brown3")
+
+# Projections of the colour of the wine onto the first four principal components (in other words, the scores for the first four principal components)
+
+df_out <- as.data.frame(pc_wn$x)
+df_out$group <- sapply(strsplit(as.character(row.names(df)), "_"), "[[", 1 )
+head(df_out)
+
+prinComp <- cbind(wn, pc_wn$rotation)
+
+wine_col = wn$color
+wine_qua = wn$quality
+wine_quality = ifelse(wine_qua < 6,"high","low")
+
+p1 = ggplot(df_out, aes(x = PC1, y = PC2, colour = wine_col)) + geom_point()
+p1
+p2 = ggplot(df_out, aes(x = PC1, y = PC3, colour = wine_col)) + geom_point()
+p2
+p3 = ggplot(df_out, aes(x = PC1, y = PC4, colour = wine_col)) + geom_point()
+p3
+p4 = ggplot(df_out, aes(x = PC2, y = PC3, colour = wine_col)) + geom_point()
+p4
+p5 = ggplot(df_out, aes(x = PC2, y = PC4, colour = wine_col)) + geom_point()
+p5
+p6 = ggplot(df_out, aes(x = PC3, y = PC4, colour = wine_col)) + geom_point()
+p6
+
+gr1 = grid.arrange(arrangeGrob(p1 + theme(legend.position="none"), p2 + theme(legend.position="none"), p3 + theme(legend.position="none"), p4 + theme(legend.position="none"), p5 + theme(legend.position="none"), p6 + theme(legend.position="none")), nrow=1)
+gr1
+
+# On the whole, observations belonging to the same colour (red and white) tend to lie near each other in this low-dimensional space and tend to have similar values on the first few principal component score vectors. This indicates that wines with the same colour do have similar chemical compositions. However, when we consider PCs explaining lesser proportion of the variance, the difference between red and white wines becomes slightly indistinct.
+
+p11 = ggplot(df_out, aes(x = PC1, y = PC2, colour = wine_qua)) + geom_point() + scale_color_gradientn(colours = rainbow(10))
+p11
+p22 = ggplot(df_out, aes(x = PC1, y = PC3, colour = wine_qua)) + geom_point() + scale_color_gradientn(colours = rainbow(10))
+p22
+p33 = ggplot(df_out, aes(x = PC1, y = PC4, colour = wine_qua)) + geom_point() + scale_color_gradientn(colours = rainbow(10))
+p33
+p44 = ggplot(df_out, aes(x = PC2, y = PC3, colour = wine_qua)) + geom_point() + scale_color_gradientn(colours = rainbow(10))
+p44
+p55 = ggplot(df_out, aes(x = PC2, y = PC4, colour = wine_qua)) + geom_point() + scale_color_gradientn(colours = rainbow(10))
+p55
+p66 = ggplot(df_out, aes(x = PC3, y = PC4, colour = wine_qua)) + geom_point() + scale_color_gradientn(colours = rainbow(10))
+p66
+
+gr2 = grid.arrange(arrangeGrob(p11 + theme(legend.position="none"), p22 + theme(legend.position="none"), p33 + theme(legend.position="none"), p44 + theme(legend.position="none"), p55 + theme(legend.position="none"), p66 + theme(legend.position="none")), nrow=1)
+gr2
+
+p111 = ggplot(df_out, aes(x = PC1, y = PC2, colour = wine_quality)) + geom_point() 
+p111
+p222 = ggplot(df_out, aes(x = PC1, y = PC3, colour = wine_quality)) + geom_point()
+p222
+p333 = ggplot(df_out, aes(x = PC1, y = PC4, colour = wine_quality)) + geom_point()
+p333
+p444 = ggplot(df_out, aes(x = PC2, y = PC3, colour = wine_quality)) + geom_point() 
+p444
+p555 = ggplot(df_out, aes(x = PC2, y = PC4, colour = wine_quality)) + geom_point() 
+p555
+p666 = ggplot(df_out, aes(x = PC3, y = PC4, colour = wine_quality)) + geom_point()
+p666
+
+gr3 = grid.arrange(arrangeGrob(p111 + theme(legend.position="none"), p222 + theme(legend.position="none"), p333 + theme(legend.position="none"), p444 + theme(legend.position="none"), p555 + theme(legend.position="none"), p666 + theme(legend.position="none")), nrow=1)
+gr3
+
+# On the whole, as can be seen, it is difficult to separate the observations based on the quality of wine that is scaled from 1 to 10. Clear and natural clusters fail to emerge as observed from the graphs. The different quality wines simply overlap each other when plotted against the first few principal components. It is hard to distinguish the lower quality from the high quality (after we defined low quality as being wines rated from 6 to 10 and high with ratings of 1 to 5). 
+#==================================================================================
+
+# K-means clustering (without PCA and with PCA)
+
+set.seed(44)
+# Plotting the elbow curve
+k = 15
+l = list()
+for (i in 1:k){
+set.seed(4)
+l[[i]] <- kmeans(wn_scaled, i, nstart = 20, iter.max=30)$tot.withinss
+}
+plot(1:k, l, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares", main = "Scree plot - Kmeans")
+
+# According to the elbow plot, the optimal number of clusters is k = 4 or k = 5
+
+clust1 = kmeans(wn_scaled, 4, nstart=25)
+
+fviz_cluster(clust1, data = wn_scaled)
+
+# Computing the gap statistics for different values of k
+
+gap_stat <- clusGap(wn_scaled, FUN = kmeans, nstart = 10, K.max = 10, B = 5, iter.max=30)
+fviz_gap_stat(gap_stat)
+
+# No. of optimal clusters is k = 5
+
+clust2 = kmeans(wn_scaled, 5, nstart=25)
+
+# Computing the optimal number of clusters using the average silhouette method
+
+fviz_nbclust(wn_scaled, FUN = kmeans, method = "silhouette")
+
+# No. of optimal clusters is k = 2
+
+clust3 = kmeans(wn_scaled, 2, nstart=25)
+
+fviz_cluster(clust3, data = wn_scaled)
+
+# Now, we first consider the case with optimal number of clusters being k = 4
+
+table(wn[,13],clust1$cluster)
+
+4/(4+638+917+40)
+638/(4+638+917+40)
+917/(4+638+917+40)
+40/(4+638+917+40)
+
+# 0.2 percent of the red wines are in cluster 1; 40 percent of red wines in cluster 2; 57 percent of red wines are in cluster 3; and 2.5% in cluster 4.
+
+1869/(1869+49+90+2890)
+49/(1869+49+90+2890)
+90/(1869+49+90+2890)
+2890/(1869+49+90+2890)
+
+# 38% of the white wines are in cluster 1; 1 percent of white wines in cluster 2; another 2% in cluster 3 and 59% of the total wines in cluster 4.
+
+1869/(4+1869)
+49/(49+638)
+90/(90+917)
+2890/(2890+40)
+
+# Proportion of red and white wines in each cluster
+# Cluster 1 comprises 99.7% of white wines and a mere 0.3% of red wines
+# CLuster 2 consists of 7.1% of white wines and 92.9% of red wines
+# CLuster 3 consists of 8.9% of white wines and 91.9% of red wines
+# Cluster 4 comprises 98.6% of white wines and a mere 1.4% of red wines
+
+# We could combine clusters 1 and 4 and combine clusters 2 and 3
+
+# Clusters 1 and 4 comprise primarily of white wines whereas Clusters 2 and 3 comprise mainly of red wines
+
+# Now, we consider the case with k = 2 clusters
+
+table(wn[,13],clust3$cluster)
+
+24/(24+1575)
+1575/(24+1575)
+
+# 1.5 percent of the red wines are in cluster 1 and the remaining 98.5% percent of red wines in cluster 2
+
+4830/(4830+68)
+68/(4830+68)
+
+# 98.6% of the white wines are in cluster 1 and the remaining 1.4% percent of red wines in cluster 2
+
+24/(24+4830)
+1575/(1575+68)
+
+# Proportion of red and white wines in each cluster
+# Cluster 1 comprises 99.5% of white wines and a mere 0.5% of red wines
+# Cluster 2 consists of 4.1% of white wines and 95.9% of red wines
+
+# Splitting the data into train and test sets in a way to ensure that the distribution of wines according to colour are approximately equivalent in the train and test data sets
+
+set.seed(123)
+library(caTools)
+
+split = sample.split(wine_col, SplitRatio = 2/3)
+training_set = subset(wn, split == TRUE)
+test_set = subset(wn, split == FALSE)
+
+# Scaling the test and train datasets
+
+x_train = scale(training_set[,1:11], center=TRUE, scale=TRUE)
+x_test = scale(test_set[,1:11], center=TRUE, scale=TRUE)
+
+set.seed(44)
+# Plotting the elbow curve
+k = 15
+l = list()
+for (i in 1:k){
+set.seed(4)
+l[[i]] <- kmeans(x_train, i, nstart = 20, iter.max=30)$tot.withinss
+}
+plot(1:k, l, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares", main = "Scree plot - Kmeans train data")
+
+# According to the elbow plot, the optimal number of clusters is k = 4 or k = 5
+
+clustt1 = kmeans(x_train, 4, nstart=25)
+
+fviz_cluster(clustt1, data = x_train)
+
+# Computing the gap statistics for different values of k
+
+gap_statt1 <- clusGap(x_train, FUN = kmeans, nstart = 10, K.max = 10, B = 5, iter.max=30)
+
+fviz_gap_stat(gap_statt1)
+
+# No. of optimal clusters is k = 5
+
+clustt2 = kmeans(x_train, 5, nstart=25)
+
+# Computing the optimal number of clusters using the average silhouette method
+
+fviz_nbclust(x_train, FUN = kmeans, method = "silhouette")
+
+# No. of optimal clusters is k = 3
+
+clustt3 = kmeans(x_train, 3, nstart=25)
+
+# Now, we consider the case with k = 4 clusters
+
+table(training_set[,13],clustt1$cluster)
+
+# Attempt to predict the clusters for the test data
+
+predict = as.kcca(clustt1, data=x_test)
+table(test_set[,13],clusters(predict))
+
+(316+203)/(316+203+1+13)
+(601+435)/(601+435+3+27)
+
+# 97.4% of the red wines are in cluster 1 and cluster 2 for the testing data and approximately the same proportion of the red wines are contained in cluster 1 and cluster 2 for the training data
+
+### PCA and k-means
+
+pc_wn11 = prcomp(x_train)
+
+pve = 100*pc_wn11$sdev^2/sum(pc_wn$sdev^2)
+par(mfrow=c(1,2))
+plot(pve, type="o", ylab="PVE", xlab="Principal Component", col =" blue ")
+plot(cumsum(pve), type="o", ylab="Cumulative PVE", xlab="Principal Component", col =" brown3")
+
+# The optimal number of principal components to be considered seems to be k = 5
+
+train.data = data.frame(pc_wn11$x)
+train.data = train.data[,1:5]
+
+set.seed(44)
+# Plotting the elbow curve
+k = 15
+l = list()
+for (i in 1:k){
+set.seed(4)
+l[[i]] <- kmeans(train.data, i, nstart = 20, iter.max=30)$tot.withinss
+}
+plot(1:k, l, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares", main = "Scree plot - PCA+Kmeans train data")
+
+# The optimal number of clusters is k = 4 or k = 5
+
+clustkp = kmeans(train.data, 4, nstart=25)
+
+# Trying to implement the PCA computed on the training dataset onto the testing data
+
+test.data = predict(pc_wn11, newdata = x_test[,1:11])
+test.data = as.data.frame(test.data)
+test.data = test.data[,1:5]
+
+# Now, we consider the case with k = 4 clusters 
+
+table(training_set[,13],clustkp$cluster)
+
+# Trying to implement the k-means computed on the PC for training data onto the PC for test data
+
+# Attempt to predict the clusters for the test data
+
+predict1 = as.kcca(clustkp, data=test.data)
+table(test_set[,13],clusters(predict1))
+
+# When we compute PCA and then use k-means, we can summarize the results as under:
+
+(598+438)/(598+3+438+27)
+(1229+1934)/(1229+64+38+1934)
+
+# Clusters 1 and 3 represent 97.2% of the red wines in the training set whereas Clusters 2 and 4 represent 96.9% of the white wines in the training set
+
+(37+439)/(37+439+57)
+(249+948)/(6+249+430+948)
+
+# Clusters 1 and 3 represent 89.3% of the red wines in the testing set whereas Clusters 2 and 4 represent 73.3% of the white wines in the test set (assuming that the same pattern should hold for the test data)
+
+# Only K-means (without PCA) performed better on the test set compared to the case where we considered K-means along with PCA.
+
+# Concern: We have considered only one sample and did not draw different combinations of training and test datasets
+
+#==================================================================================
+
+# Agglomerative Hierarchical Clustering (without PCA and with PCA)
+
+# We continue to use the scaled data
+
+hc1 <- agnes(wn_scaled, method = "complete")
+hc1$ac
+
+# We used agnes instead of hclust since we can compute the agglomerative coefficient and see which method has coefficient closer to 1 and thus has a stronger clustering structure
+
+hc2 <- agnes(wn_scaled, method = "single")
+hc2$ac
+
+hc3 <- agnes(wn_scaled, method = "average")
+hc3$ac
+
+hc4 <- agnes(wn_scaled, method = "ward")
+hc4$ac
+
+# Agglomerative coefficient using the method "complete" = 0.9757232
+# Agglomerative coefficient using the method "single" = 0.9564608
+# Agglomerative coefficient using the method "average" = 0.9686528
+# Agglomerative coefficient using the method "ward" = 0.996168 <- we use this
+
+pltree(hc4, cex = 0.6, hang = -1, main = "Dendrogram of agnes")
+
+# Graphing the elbow plot
+
+fviz_nbclust(wn_scaled, FUN = hcut, method = "wss")
+
+# The optimal number of clusters is k = 4
+
+# Using the average silhouette method
+
+fviz_nbclust(wn_scaled, FUN = hcut, method = "silhouette")
+
+# The optimal number of clusters is k = 2
+
+# Computing the gap statistics and plotting the same for each cluster
+
+gap_stat <- clusGap(wn_scaled, FUN = hcut, nstart = 10, K.max = 10, B = 5)
+fviz_gap_stat(gap_stat)
+
+# The optimal number of clusters is k = 
+
+sub_grp <- cutree(hc4, k = 4)
+table(wn$color,sub_grp)
+
+fviz_cluster(list(data = wn_scaled, cluster = sub_grp))
+
+877/(877+701+18+3)
+701/(877+701+18+3)
+18/(877+701+18+3)
+3/(877+701+18+3)
+
+# 55% percent of the red wines are in cluster 1; 44 percent of red wines in cluster 2; 1% percent of red wines are in cluster 3; 0.2% in cluster 4
+
+60/(60+103+3610+1125)
+103/(60+103+3610+1125)
+3610/(60+103+3610+1125)
+1125/(60+103+3610+1125)
+
+# 1% of the white wines are in cluster 1; 2 percent of white wines in cluster 2; another 74% in cluster 3 and 23% of the total wines in cluster 4
+
+877/(877+60)
+701/(701+103)
+18/(18+3610)
+3/(3+1125)
+
+# Proportion of red and white wines in each cluster
+# Cluster 1 comrpises 6.4% of white wines and 93.6% of red wines
+# CLuster 2 consists of 13% of white wines and 87% of red wines
+# CLuster 3 consists of 99.5% of white wines and 0.5% of red wines
+# Cluster 4 comrpises 99.7% of white wines and a mere 0.3% of red wines
+
+(877+701)/(877+701+18+3)
+(3610+1125)/(60+103+3610+1125)
+
+# Clusters 1 and 2 represent 98.7% of the red wines in the training set whereas Clusters 3 and 4 represent 96.7% of the white wines in the training set
+
+# The results are similar to what we obtained using k-means without PCA on the entire dataset with no. of clusters k = 4
+
+# We could combine clusters 3 and 4 and combine clusters 1 and 2
+
+sub_grp1 <- cutree(hc4, k = 2)
+table(wn$color,sub_grp1)
+
+1578/(1578+163)
+4735/(4735+21)
+
+# Cluster 1 contains 91% of red wines and the rest 9% are white wines. 
+# Cluster 2 contains 99.6% of white wines and 0.4% of red wines
+
+fviz_cluster(list(data = wn_scaled, cluster = sub_grp1))
+
+# Agglomerative Hierarchical Clustering and PCA
+
+pc_wn12 = prcomp(wn_scaled)
+
+pve = 100*pc_wn12$sdev^2/sum(pc_wn$sdev^2)
+par(mfrow=c(1,2))
+plot(pve, type="o", ylab="PVE", xlab="Principal Component", col =" blue ")
+plot(cumsum(pve), type="o", ylab="Cumulative PVE", xlab="Principal Component", col =" brown3")
+
+# The optimal number of principal components to be considered seems to be k = 5
+
+our.data = data.frame(pc_wn12$x)
+our.data = our.data[,1:4]
+
+set.seed(44)
+# Plotting the elbow curve
+k = 15
+l = list()
+for (i in 1:k){
+set.seed(4)
+l[[i]] <- kmeans(our.data, i, nstart = 20, iter.max=30)$tot.withinss
+}
+plot(1:k, l, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares", main = "Scree plot - PCA+Hierarchical clustering")
+
+# The optimal number of clusters is k = 4 or k = 5
+
+hc41 <- agnes(our.data, method = "ward")
+hc41$ac
+sub_grp1 <- cutree(hc41, k = 4)
+table(wn$color,sub_grp1)
+
+fviz_cluster(list(data = wn_scaled, cluster = sub_grp1))
+
+# When we compute PCA and then use k-means, we can summarize the results as under:
+
+(1220+318)/(1220+318+16+45)
+(1508+3301)/(89+0+1508+3301)
+
+# Clusters 1 and 2 represent 96.2% of the red wines in the training set whereas Clusters 3 and 4 represent 98.2% of the white wines in the training set
+
+# Only agglomerative hierarchical clustering (without PCA) performed slightly better on the dataset compared to the case where we considered hierarchical along with PCA.
+
+# Conclusion: There is not much of a stark difference between using PCA and not using PCA and simply using the clustering methods. Only PCA does not prove to be extremely useful in order to distinguish between the red and white wines. The clustering methods were able to perform the task better. Also there is not much difference between k-means and hierarchical clustering. However, we were able to run k-means on the test data. 
+
+# Conclusion: There is not much of a stark difference between using PCA and not using PCA and simply using the clustering methods
+
+# If we divide the wines into low quality and high quality, then clustering methods should be able to distinguish between the low and high quality wines.  
+
+#==================================================================================
+#==================================================================================
+
+# QUESTION 2
+
+# Alternative 1
+
+sm = read.csv("~/Downloads/ECO395M-master-3/data/social_marketing.csv", row.names=1)
+summary(sm)
+
+library(tidyverse)
+library(mosaic)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(FactoMineR)
+library(factoextra)
+
+# We try to identify groups of interest for the marketing team by using PCA first
+
+# We commence by scaling the data
+
+Z = sm/rowSums(sm)
+
+# Computing PCA
+
+pc_sm = prcomp(Z, scale=TRUE, rank=2)
+summary(pc_sm)
+
+loadings = pc_sm$rotation
+scores = pc_sm$x
+
+# Plotting the scree plot and the cumulative variance plot
+
+pve = 100*pc_sm$sdev^2/sum(pc_wn$sdev^2)
+par(mfrow=c(1,2))
+plot(pve, type="o", ylab="PVE", xlab="Principal Component", col =" blue ")
+plot(cumsum(pve), type="o", ylab="Cumulative PVE", xlab="Principal Component", col =" brown3")
+
+# The optimal number of PCs to be considered seems to be 12
+
+# As can be seen from the summary, the first two components (out of a total of 36 components) summarize only 15.2% of the total proportion of the variance 
+
+# Plotting each of the observations on the PC1-PC2 space
+
+qplot(scores[,1], scores[,2], xlab='Component 1', ylab='Component 2', colour = I("green"))
+
+# We see that most of the observations are very closely clustered around the top & top-left indicating large positive loadings on the second component and low to large negative loadings on the first component, while some are clustered near the bottom indicating large negative loadings on the second principal component and others are clustered around the right indication large positive loading on the first principal component
+
+# How are the individual PCs loaded on the original variables?
+
+# PC1
+
+o1 = order(loadings[,1], decreasing=TRUE)
+colnames(Z)[head(o1,6)]
+colnames(Z)[tail(o1,6)]
+
+# Six Categories related most positively with the first component are "religion", "sports_fandom", "parenting", "food", "school", "family"
+
+# Six Categories most negatively associated with the first component are "college_uni", "fashion", "cooking", "shopping", "chatter", "photo_sharing"
+
+# PC2
+
+o2 = order(loadings[,2], decreasing=TRUE)
+colnames(Z)[head(o2,6)]
+colnames(Z)[tail(o2,6)]
+
+# Six Categories related most positively with the second component are "chatter", "politics", "travel", "shopping", "automotive", "current_events"
+
+# Six Categories most negatively associated with the second component are "beauty", "fashion", "cooking", "outdoors", "personal_fitness", "health_nutrition"
+
+# Graphing of variables along with their contributions
+
+fviz_pca_var(pc_sm, col.var="contrib", gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), repel = FALSE, legend.title = "Contribution")
+
+# The categories negatively and positively associated with each of the components can be identified through the graph as well
+
+# Therefore, two clusters can be identified:
+
+# 1) One which includes "family",school","parenting","food","religion", etc. These represent more of 'familial', core values and could be associated with users in their mid 30s or older.
+
+# 2) Second which includes "beauty", "fashion", "personal_fitness", "health_nutrition", etc. These are more of self-care related interests, something more popular amongst the younger generation.
+
+#==================================================================================
+
+# Alternative 2
+
+library(tidyverse)
+library(corrplot)
+library(factoextra)
+library(LICORS)
+library(mosaic)
+library(foreach)
+library(cluster)
+library(flexclust)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(wesanderson)
+
+sm = read.csv("~/Downloads/ECO395M-master-3/data/social_marketing.csv")
+summary(sm)
+
+# Scaling the data
+
+sm_scaled <- scale(sm[,2:37], center=TRUE, scale=TRUE)
+
+# Extracting the centers and scales from the scaled data
+
+mu = attr(sm_scaled,"scaled:center")
+sigma = attr(sm_scaled,"scaled:scale")
+
+# We use k-means now
+
+# We graph an elbow plot; and also resort to plotting the gap statistics in order to identify the optimal number of clusters
+
+set.seed(44)
+# Plotting the elbow curve
+k = 15
+l = list()
+for (i in 1:k){
+set.seed(4)
+l[[i]] <- kmeans(sm_scaled, i, nstart = 20, iter.max=30)$tot.withinss
+}
+plot(1:k, l, type="b", pch = 19, frame = FALSE, xlab="Number of clusters K", ylab="Total within-clusters sum of squares", main = "Scree plot - Kmeans")
+
+# According to the elbow plot, the optimal number of clusters is k = 7 or k = 8
+
+clust1 = kmeans(sm_scaled, 7, nstart=25)
+
+fviz_cluster(clust1, data = sm_scaled)
+
+# Computing the gap statistics for different values of k
+
+gap_stat <- clusGap(sm_scaled, FUN = kmeans, nstart = 10, K.max = 10, B = 5, iter.max=30)
+
+fviz_gap_stat(gap_stat)
+
+# The optimal number of clusters is k = 10
+
+clust2 = kmeans(sm_scaled, 10, nstart=25)
+
+fviz_cluster(clust2, data = sm_scaled)
+
+# Be it k = 7 or k = 10, the clusters are not very distinct. We extract the cluster centers.
+
+# We consider the case where k = 7 and extract the cluster centers
+
+c1 = clust1$center[1,]*sigma + mu
+c2 = clust1$center[2,]*sigma + mu
+c3 = clust1$center[3,]*sigma + mu
+c4 = clust1$center[4,]*sigma + mu
+c5 = clust1$center[5,]*sigma + mu
+c6 = clust1$center[6,]*sigma + mu
+c7 = clust1$center[7,]*sigma + mu
+
+cluster_centers = rbind(c1,c2,c3,c4,c5,c6,c7)
+cluster_centers = t(cluster_centers)
+
+# Storing the output as a csv.file
+
+write.csv(cluster_centers1, file="~/Downloads/ECO395M-master-3/data/social_marketing1.csv")
+
+#==================================================================================
+#==================================================================================
+
+# QUESTION 3
+
+library('R.utils')
+library(arules)
+library(arulesViz)
+library(grid)
+library(dplyr)
+library(methods)
+
+## File
+
+groc= read.delim2("~/Downloads/ECO395M-master-3/data/groceries.txt", header = FALSE, sep = "\t", dec = ",")
+n = dim(groc)
+
+# Since the each row contains multiple items by rows we will first split the row strings
+# identify each element
+
+groc$lists = strsplit(as.character(groc$V1),",")
+groc <- tibble::rowid_to_column(groc, "ID")
+
+# defining a new variable ngroc to include data for each ID
+
+ngroc = data.frame(ID=integer(),
+                items=character())
+for (i in 1:n) {
+  k = data.frame(ID=i, y=groc[i,3])# creating dataset for each appended
+  names(k) = c('ID','items')
+  ngroc = rbind(ngroc,k)# appending the rows together for each user
+}
+
+summary(ngroc)
+
+#Presence of 169 different items in all the transactions combined.
+#Whole milk, other vegetables, rolls/buns are the most frequently bought items.
+
+ngroc$items %>%
+  summary(maxsum=Inf) %>%
+  sort(decreasing=TRUE) %>%
+  head(20) %>%
+  barplot(las=2, cex.names=0.6)
+  
+# Turn ID into a factor
+
+ngroc$ID = factor(ngroc$ID)
+
+# First create a list of baskets: vectors of items by consumer
+
+# apriori algorithm expects a list of baskets in a special format
+# In this case, one "basket" of songs per user
+# First split data into a list of artists for each user
+
+ngroc1 = split(x=ngroc$items, f=ngroc$ID)
+
+# the first users's playlist, the second user's etc
+# note the [[ ]] indexing, this is how you extract
+# numbered elements of a list in R
+
+ngroc1[[1]]
+ngroc1[[2]]
+
+## Remove duplicates ("de-dupe")
+
+ngroc1 = lapply(ngroc1, unique)
+
+## Cast this variable as a special arules "transactions" class.
+
+ngroc2= as(ngroc1, "transactions")
+summary(ngroc2)
+
+#2159 out of 9835 transactions have only one item in the cart.
+#75% transactions have less than 6 items in the cart.
+#25% transactions have less than 2 items in the cart.
+#50% transactions have less than 3 items in the cart.
+
+# Now running the 'apriori' algorithm
+# Look at rules with support = .001 & confidence =.4 & length (# artists) <=10
+
+grocrules = apriori(ngroc2, 
+                     parameter=list(support=.001, confidence=.4, maxlen=10))
+ 
+
+## Choose a subset
+
+#Rules with high lift  
+
+inspect(subset(grocrules, lift > 5))
+
+#Rules with low confidence and high support rules.
+inspect(subset(grocrules, support > 0.001 & confidence < 0.4 ))
+
+#Rules with high confidence and high support
+inspect(subset(grocrules, support > 0.001 & confidence > 0.4))
+
+plot(grocrules)
+
+plot(grocrules, measure = c("support", "lift"), shading = "confidence")
+
+# two key plot
+plot(grocrules, method='two-key plot')
+
+
+# graph-based visualization
+
+sub1 = subset(grocrules, subset=confidence > 0.4 & support > 0.001)
+summary(sub1)
+plot(sub1, method='graph')
+
+# too many rules 
+
+plot(head(sub1, 10, by='lift'), method='graph')
+
+#==================================================================================
+
+# Submitted by Hardik Gupta (hg8675) and Khushboo R Thakkar (kt24992)
