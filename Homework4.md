@@ -134,10 +134,11 @@ It is more informative to plot the PVE of each principal component (i.e. a scree
 
 When k = 4 and we consider training data, the results are as under:
 
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Insert_1.png)
 
 When k = 4 and we consider test data, the results are as under:
 
-
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Insert_2.png)
 
 Clusters 1 and 3 represent 97.2% of the red wines in the training set whereas Clusters 2 and 4 represent 96.9% of the white wines in the training set.
 
@@ -176,7 +177,7 @@ We use k = 4 and obtain the following results:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_28.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Insert_3.png)
 
 55% percent of the red wines are in cluster 1; 44 percent of red wines in cluster 2; 1% percent of red wines are in cluster 3; 0.2% in cluster 4.
 1% of the white wines are in cluster 1; 2 percent of white wines in cluster 2; another 74% in cluster 3 and 23% of the total wines in cluster 4.
