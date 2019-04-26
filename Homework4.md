@@ -134,7 +134,6 @@ It is more informative to plot the PVE of each principal component (i.e. a scree
 
 When k = 4 and we consider training data, the results are as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_24.png)
 
 When k = 4 and we consider test data, the results are as under:
 
@@ -159,25 +158,25 @@ Agglomerative coefficient using the method "single" = 0.9564608
 Agglomerative coefficient using the method "average" = 0.9686528
 Agglomerative coefficient using the method "ward" = 0.996168 <- we use this and the dendrogram looks as shown under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_26.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_24.png)
 
-We certainly can prune the tree and in order to know the optimal number of clusters, we resort to using the elbow plot, the average silhouette method and the graph displaying the gap statistics for different clusters. 
+We certainly can prune the tree and in order to know the optimal number of clusters, we resort to using the elbow plot, the average silhouette method and the graph displaying the gap statistics for different clusters.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_27.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_25.png)
 
 The optimal number of clusters as per the elbow plot seems to be k = 4.
 The optimal number of clusters as per the gap statistic method is k = 6.
 The optimal number of clusters as per the average silhouette method is k = 2.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_28.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_26.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_27.png)
 
 We use k = 4 and obtain the following results:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_30.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_28.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_31.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
 
 55% percent of the red wines are in cluster 1; 44 percent of red wines in cluster 2; 1% percent of red wines are in cluster 3; 0.2% in cluster 4.
 1% of the white wines are in cluster 1; 2 percent of white wines in cluster 2; another 74% in cluster 3 and 23% of the total wines in cluster 4.
@@ -197,13 +196,13 @@ The results are similar to what we obtained using k-means without PCA on the ent
 
 We use the same principal components as done in the beginning of this section and consider up to 4 principal components. We now run the hierarchical clustering algorithm on these four principal components rather than considering all 11 chemical components. The optimal number of clusters as per the elbow plot seems to be k = 4 or k = 5.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_32.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_30.png)
 
 We consider k = 4. We simply use the method defined earlier when we started off with hierarchical clustering. The results are as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_30.png)
-
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_31.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_32.png)
 
 Clusters 1 and 2 represent 96.2% of the red wines in the training set whereas Clusters 3 and 4 represent 98.2% of the white wines in the training set
 
