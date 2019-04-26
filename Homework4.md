@@ -66,11 +66,9 @@ The graphs look as shown below:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_13.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_14.png)
-
 When k = 4 is considered:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_15.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_14.png)
 
 0.2 percent of the red wines are in cluster 1; 40 percent of red wines in cluster 2; 57 percent of red wines are in cluster 3; and 2.5% in cluster 4. 
 
@@ -85,7 +83,7 @@ Cluster 4 comprises 98.6% of white wines and a mere 1.4% of red wines
 
 When k = 2 is considered:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_16.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_15.png)
 
 1.5 percent of the red wines are in cluster 1 and the remaining 98.5% percent of red wines in cluster 2.
 
@@ -104,23 +102,23 @@ The optimal number of clusters as per the elbow plot seems to be k = 4 or k = 5.
 The optimal number of clusters as per the gap statistic method is k = 5.
 The optimal number of clusters as per the average silhouette method is k = 3.
 
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_16.png)
+
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_17.png)
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_18.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_19.png)
-
 We consider the case with k = 4:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_20.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_19.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_21.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_20.png)
 
 We then use the established k-means loadings and project it on to the test data. 
 
 We get the following results:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_22.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_21.png)
 
 97.4% of the red wines are in cluster 1 and cluster 2 for the testing data and approximately the same proportion of the red wines are contained in cluster 1 and cluster 2 for the training data.
 
@@ -130,17 +128,17 @@ We first use PCA and determine the optimal number of principal components to be 
 
 It is more informative to plot the PVE of each principal component (i.e. a scree plot) and the cumulative PVE of each principal component. As per the elbow plot on the left hand side, it seems optimal to consider the first five principal components. After computing this, we run k-means on the first five principal components and learn that the optimal number of clusters seems to be either k = 4 or k = 5.
 
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_22.png)
+
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_23.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_24.png)
-
 When k = 4 and we consider training data, the results are as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_25.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Insert_1.png)
 
-When k = 4 and we consider training data, the results are as under:
+When k = 4 and we consider test data, the results are as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_26.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Insert_2.png)
 
 Clusters 1 and 3 represent 97.2% of the red wines in the training set whereas Clusters 2 and 4 represent 96.9% of the white wines in the training set.
 
@@ -161,25 +159,25 @@ Agglomerative coefficient using the method "single" = 0.9564608
 Agglomerative coefficient using the method "average" = 0.9686528
 Agglomerative coefficient using the method "ward" = 0.996168 <- we use this and the dendrogram looks as shown under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_27.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_24.png)
 
-We certainly can prune the tree and in order to know the optimal number of clusters, we resort to using the elbow plot, the average silhouette method and the graph displaying the gap statistics for different clusters. 
+We certainly can prune the tree and in order to know the optimal number of clusters, we resort to using the elbow plot, the average silhouette method and the graph displaying the gap statistics for different clusters.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_28.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_25.png)
 
 The optimal number of clusters as per the elbow plot seems to be k = 4.
 The optimal number of clusters as per the gap statistic method is k = 6.
 The optimal number of clusters as per the average silhouette method is k = 2.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_26.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_30.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_27.png)
 
 We use k = 4 and obtain the following results:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_31.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_28.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_32.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Insert_3.png)
 
 55% percent of the red wines are in cluster 1; 44 percent of red wines in cluster 2; 1% percent of red wines are in cluster 3; 0.2% in cluster 4.
 1% of the white wines are in cluster 1; 2 percent of white wines in cluster 2; another 74% in cluster 3 and 23% of the total wines in cluster 4.
@@ -199,7 +197,7 @@ The results are similar to what we obtained using k-means without PCA on the ent
 
 We use the same principal components as done in the beginning of this section and consider up to 4 principal components. We now run the hierarchical clustering algorithm on these four principal components rather than considering all 11 chemical components. The optimal number of clusters as per the elbow plot seems to be k = 4 or k = 5.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Insert_4.png)
 
 We consider k = 4. We simply use the method defined earlier when we started off with hierarchical clustering. The results are as under:
 
@@ -290,39 +288,6 @@ After transforming the data into a readable transaction format accepted by arule
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_3_1.png)
 
-             ID                    items      
-     Min.   :   1   whole milk      : 2513  
-     1st Qu.:2456   other vegetables: 1903  
-     Median :4828   rolls/buns      : 1809  
-     Mean   :4909   soda            : 1715  
-     3rd Qu.:7380   yogurt          : 1372  
-     Max.   :9835   bottled water   : 1087  
-                 (Other)         :32968  
-
-
-
-        transactions as itemMatrix in sparse format with
-         9835 rows (elements/itemsets/transactions) and
-         169 columns (items) and a density of 0.02609146 
-
-        most frequent items:
-              whole milk other vegetables       rolls/buns             soda           yogurt 
-                2513             1903             1809             1715             1372 
-                (Other) 
-              34055 
-
-        element (itemset/transaction) length distribution:
-        sizes
-           1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17 
-        2159 1643 1299 1005  855  645  545  438  350  246  182  117   78   77   55   46   29 
-          18   19   20   21   22   23   24   26   27   28   29   32 
-          14   14    9   11    4    6    1    1    1    1    3    1 
-
-         Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-         1.000   2.000   3.000   4.409   6.000  32.000 
-
-
-
 Few points to note from the summary:
 1) Presence of 169 different items in all the transactions combined.
 2) Whole milk, other vegetables, rolls/buns are the most frequently bought items.
@@ -333,62 +298,9 @@ Few points to note from the summary:
 
 We then run the apriori algorithm to get the rules from these transactions. In order to select threshold for support, let us consider itemsets which appear atleast in 10 baskets out of 9835. That converts to a support threshold of (10/9835) ~ 0.001. Threshold for confidence will be fixed at 0.4 to ensure that a min of 4 baskets that contain X also have Y in them(for the rule X -> Y). .
 The algorithm created 8967 rules. 
-
-        lhs                            rhs                         support confidence      lift count
-        [1]    {honey}                     => {whole milk}            0.001118454  0.7333333  2.870009    11
-        [2]    {soap}                      => {whole milk}            0.001118454  0.4230769  1.655775    11
-        [3]    {tidbits}                   => {soda}                  0.001016777  0.4347826  2.493345    10
-        [4]    {tidbits}                   => {rolls/buns}            0.001220132  0.5217391  2.836542    12
-        [5]    {cocoa drinks}              => {whole milk}            0.001321810  0.5909091  2.312611    13
-        [6]    {pudding powder}            => {whole milk}            0.001321810  0.5652174  2.212062    13
-        [7]    {cooking chocolate}         => {whole milk}            0.001321810  0.5200000  2.035097    13
-        [8]    {potato products}           => {whole milk}            0.001220132  0.4285714  1.677278    12
-        [9]    {canned fruit}              => {whole milk}            0.001321810  0.4062500  1.589920    13
-        [10]   {meat spreads}              => {yogurt}                0.001830198  0.4285714  3.072157    18
-        [11]   {skin care}                 => {whole milk}            0.001626843  0.4571429  1.789097    16
-        [12]   {tea}                       => {whole milk}            0.001626843  0.4210526  1.647852    16
-        [13]   {abrasive cleaner}          => {other vegetables}      0.001626843  0.4571429  2.362585    16
-        [14]   {abrasive cleaner}          => {whole milk}            0.001626843  0.4571429  1.789097    16
-        [15]   {liver loaf}                => {whole milk}            0.002135231  0.4200000  1.643733    21
-        [16]   {curd cheese}               => {other vegetables}      0.002135231  0.4200000  2.170625    21
-        [17]   {curd cheese}               => {whole milk}            0.002338587  0.4600000  1.800279    23
-        [18]   {cleaner}                   => {whole milk}            0.002338587  0.4600000  1.800279    23
-
-                ....
-
-        [5724] {soda,                                                                                       
-        root vegetables,                                                                            
-        napkins}                   => {other vegetables}      0.001626843  0.6400000  3.307620    16
-        [5725] {other vegetables,                                                                           
-        soda,                                                                                       
-        napkins}                   => {root vegetables}       0.001626843  0.5333333  4.893035    16
-        [5726] {soda,                                                                                       
-        root vegetables,                                                                            
-        napkins}                   => {whole milk}            0.001220132  0.4800000  1.878552    12
-        [5727] {yogurt,                                                                                     
-        root vegetables,                                                                            
-        napkins}                   => {other vegetables}      0.001321810  0.4814815  2.488371    13
-        [5728] {yogurt,                                                                                     
-        root vegetables,                                                                            
-        napkins}                   => {whole milk}            0.001423488  0.5185185  2.029299    14
-        [5729] {rolls/buns,                                                                                 
-        root vegetables,                                                                            
-        napkins}                   => {other vegetables}      0.001423488  0.4827586  2.494972    14
-        [5730] {rolls/buns,                                                                                 
-        root vegetables,                                                                            
-        napkins}                   => {whole milk}            0.001321810  0.4482759  1.754394    13
-        [5731] {other vegetables,                                                                           
-        root vegetables,                                                                            
-        napkins}                   => {whole milk}            0.002338587  0.5111111  2.000310    23
-        [5732] {whole milk,                                                                                 
-        root vegetables,                                                                            
-        napkins}                   => {other vegetables}      0.002338587  0.4791667  2.476408    23
-        [5733] {rolls/buns,                                                                                 
-        soda,                                                                                       
+Evidently we can say that rules with high lift have low support.
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_3_2.png)
-
-Evidently we can say that rules with high lift have low support.
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_3_3.png)
 
