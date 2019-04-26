@@ -250,6 +250,37 @@ These can be identified by closely observing the graph displaying the contributi
 
 2) Second which includes "beauty", "fashion", "personal_fitness", "health_nutrition", etc. These are more of self-care related interests, something more popular amongst the younger generation.
 
+Alternative 2: We now try to run k-means on scaled data and consider all the 36 variables. We commence by scaling the data, followed by plotting the elbow curve and graphing the gap statistics against each of the different values of k. We learn that the optimal number of clusters as shown by the elbow is k = 7 or k = 8. Similarly, the optimal number of clusters as per our gap statistics method is k = 10.
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_2_4.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_2_5.png)
+
+We run k-means with k = 7 and k = 10. Be it k = 7 or k = 10, the clusters are not very distinct. We extract the cluster centers as can be seen from the graphs below.
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_2_6.png)
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_2_7.png)
+
+Since difficult to locate the different clusters, we compute the cluster center and try to observe any patterns in the clusters, if any. We consider k = 7 since it is optimal as per the elbow plot. 
+
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_2_8.png)
+
+A few patterns can be noticed:
+
+Cluster 1: People under cluster 1 tweet about current events, shopping, art, tv, films, dating, business. 
+
+Cluster 2: We fail to notice any categories in particular that interest this group.
+
+Cluster 3: This group tweets frequently about photo sharing, beauty, fashion, cooking, etc indicating that this seems to be a younger lot of all the customers.
+
+Cluster 4: People in this group seem to be interested in travel, politics, news, computers, automotive indicating that it primarily comprises men who could be 30 years or older.
+
+Cluster 5: This group consists of health conscious people tweeting frequently about health and nutrition, personal fitness and outdoors.
+
+Cluster 6: People in this group seem to be inclined towards tweeting about family, religion, food, parenting, schooling, etc. suggesting that it comprises of the older lot of the entire customer base.
+
+Cluster 7: This group may consist of university students that are primarily into tweeting about colleges and universities, online gaming, sports, etc.
 
 ### Question 3
 
