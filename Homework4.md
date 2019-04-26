@@ -66,11 +66,9 @@ The graphs look as shown below:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_13.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_14.png)
-
 When k = 4 is considered:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_15.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_14.png)
 
 0.2 percent of the red wines are in cluster 1; 40 percent of red wines in cluster 2; 57 percent of red wines are in cluster 3; and 2.5% in cluster 4. 
 
@@ -85,7 +83,7 @@ Cluster 4 comprises 98.6% of white wines and a mere 1.4% of red wines
 
 When k = 2 is considered:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_16.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_15.png)
 
 1.5 percent of the red wines are in cluster 1 and the remaining 98.5% percent of red wines in cluster 2.
 
@@ -104,23 +102,23 @@ The optimal number of clusters as per the elbow plot seems to be k = 4 or k = 5.
 The optimal number of clusters as per the gap statistic method is k = 5.
 The optimal number of clusters as per the average silhouette method is k = 3.
 
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_16.png)
+
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_17.png)
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_18.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_19.png)
-
 We consider the case with k = 4:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_20.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_19.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_21.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_20.png)
 
 We then use the established k-means loadings and project it on to the test data. 
 
 We get the following results:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_22.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_21.png)
 
 97.4% of the red wines are in cluster 1 and cluster 2 for the testing data and approximately the same proportion of the red wines are contained in cluster 1 and cluster 2 for the training data.
 
@@ -130,17 +128,17 @@ We first use PCA and determine the optimal number of principal components to be 
 
 It is more informative to plot the PVE of each principal component (i.e. a scree plot) and the cumulative PVE of each principal component. As per the elbow plot on the left hand side, it seems optimal to consider the first five principal components. After computing this, we run k-means on the first five principal components and learn that the optimal number of clusters seems to be either k = 4 or k = 5.
 
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_22.png)
+
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_23.png)
+
+When k = 4 and we consider training data, the results are as under:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_24.png)
 
-When k = 4 and we consider training data, the results are as under:
+When k = 4 and we consider test data, the results are as under:
 
 ![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_25.png)
-
-When k = 4 and we consider training data, the results are as under:
-
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_26.png)
 
 Clusters 1 and 3 represent 97.2% of the red wines in the training set whereas Clusters 2 and 4 represent 96.9% of the white wines in the training set.
 
@@ -161,25 +159,25 @@ Agglomerative coefficient using the method "single" = 0.9564608
 Agglomerative coefficient using the method "average" = 0.9686528
 Agglomerative coefficient using the method "ward" = 0.996168 <- we use this and the dendrogram looks as shown under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_27.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_26.png)
 
 We certainly can prune the tree and in order to know the optimal number of clusters, we resort to using the elbow plot, the average silhouette method and the graph displaying the gap statistics for different clusters. 
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_28.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_27.png)
 
 The optimal number of clusters as per the elbow plot seems to be k = 4.
 The optimal number of clusters as per the gap statistic method is k = 6.
 The optimal number of clusters as per the average silhouette method is k = 2.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_28.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_30.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
 
 We use k = 4 and obtain the following results:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_31.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_30.png)
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_32.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_31.png)
 
 55% percent of the red wines are in cluster 1; 44 percent of red wines in cluster 2; 1% percent of red wines are in cluster 3; 0.2% in cluster 4.
 1% of the white wines are in cluster 1; 2 percent of white wines in cluster 2; another 74% in cluster 3 and 23% of the total wines in cluster 4.
@@ -199,7 +197,7 @@ The results are similar to what we obtained using k-means without PCA on the ent
 
 We use the same principal components as done in the beginning of this section and consider up to 4 principal components. We now run the hierarchical clustering algorithm on these four principal components rather than considering all 11 chemical components. The optimal number of clusters as per the elbow plot seems to be k = 4 or k = 5.
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_29.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_32.png)
 
 We consider k = 4. We simply use the method defined earlier when we started off with hierarchical clustering. The results are as under:
 
