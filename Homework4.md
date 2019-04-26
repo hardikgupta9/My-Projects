@@ -137,7 +137,7 @@ When k = 4 and we consider training data, the results are as under:
 
 When k = 4 and we consider test data, the results are as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_25.png)
+
 
 Clusters 1 and 3 represent 97.2% of the red wines in the training set whereas Clusters 2 and 4 represent 96.9% of the white wines in the training set.
 
