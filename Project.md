@@ -1,4 +1,9 @@
-# Project
+# Project - ECO 395M
+
+### Abstract
+
+We try to determine the relationship between a measure of air pollution and different measures of economic activity. We collect data for the period 2010-2016 for 176 different countries. We analyse the data using fixed-effects estimator and infer that that pollution increases with economic growth in the early stages of development. However, beyond a certain level of development, the trend reverses, and economic growth improves environmental conditions by creating the resources to do so.
+
 
 ### Introduction
 
