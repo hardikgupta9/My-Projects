@@ -131,7 +131,7 @@ Given that our panel dataset is a balanced panel, we begin by deciding between e
 We have plotted the Air Pollution Index over the period in consideration for all the countries.
 
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_3.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/API.png)
 
 We run a simple model with all the independent variables (both time-varying and time-variant) using the fixed-effects and random-effects. The fixed effects model results in insignificant coefficients for all the time-invariant variables. 
 
@@ -139,11 +139,11 @@ The fixed effects estimator assumes that the variables that are fixed over time 
 In order to decide between fixed-effects and random-effects, we use the Hausman test with the null hypothesis that a random-effects model should be preferred against the alternate hypothesis that a fixed-effects model would be more appropriate. 
 Results from running the fixed-effects model are as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_3.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Table1.png)
 
 Results from running the random-effects model are as under:
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_3.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Table2.png)
 
 The p-value of the test is 0.02 (<0.05) and therefore we reject the alternative hypothesis and use fixed-effects. This is rather intuitional as we would not expect area under forest or agriculture to be uncorrelated with the total land area or length of the coastline. 
 
@@ -161,16 +161,23 @@ The model is as under:
 
 We compute the cluster robust standard errors for this model and the results are as under: 
 
-![](https://github.com/hardikgupta9/My-Projects/blob/master/4_1_3.png)
+![](https://github.com/hardikgupta9/My-Projects/blob/master/Table3.png)
 
 This model had a fairly low RMSE combined with coefficients that were significant after taking into account the cluster robust standard errors. A few other variables had a high R squared but not all statistically significant coefficients. Model 7 considered in the codes had an RMSE of 2.29 compared to RMSE of 2.30 of this model but it did not have statistically significant coefficients. Hence, we decided to consider this model in order to draw inferences. 
 
 #### Conclusion
 
-Conclusion: 
-
 * As seen through graphical analysis, variables like population density and renewable energy consumption levels fail to display any significant (linear or non-linear) relationship with the level of air pollution. Ideally or theoretically, we would expect air population to exhibit a positive relationship with population density assuming that higher density leads to more pressure on the resources. Similarly, a country relying more on wind or solar energy should have lower levels of air pollution. However, it may be the case that such countries may be producing and consuming lots of energy through conventional sources as well. Therefore, we could consider total energy consumption to identify better patterns. 
 * From our model, we can see that increase in contribution by the manufacturing sector leads to higher levels of air pollution on an average but this positive relationship is weakened as the contribution increases. Overall, an increase in the manufacturing activity leads to higher levels of pollution on an average (holding all else fixed). This is in line with the EKC variation that posits that pollution increases with economic growth in the early stages of development. However, beyond a certain level of development, however, the trend reverses, and economic growth improves environmental conditions by creating the resources to do so.
+* Due to a non-linear relationship with GDP per capita, same inference could be drawn as above. As GDP per capita increases initially, we see a decline in the levels of air pollution. However, as GDP per capita gets larger and larger, this decline falls. It could be due to the fact that as per capita income increases, we see a rise in private vehicles and an upgrade in lifestyle, more people smoking etc. 
+* If the land under agriculture increases, the levels of air pollution may go down on an average (holding all else fixed). We did test for a two-way effect through agriculture. One being directly on air pollution and the other could be rise in GDP as land under cultivation increases and thereby air pollution would decrease. However, none of the interaction terms turned out to be significant. 
+
+#### Limitations:
+
+* We ended up evaluating a panel data as we wanted to study trends across countries. Also, focusing on one country did not seem to be feasible as we would have a smaller data set and increasing the frequency did not make sense as most of these variables change over a quarter or over a year. 
+* We could have extracted the fixed effects for each country or created a dummy variable varying across panels and constant over time so as to be able to study the effects of land area, length of coastline etc but we would end up with 176 coefficients. 
+* To overcome this, we can implement models like Hausman Taylor model that would explain and estimate the slope coefficients for time-invariant variables. However, due to paucity of time and knowledge, we were not able to successfully classify our variables into time-variant exogenous,  time-variant endogenous,  time-invariant exogenous and  time-invariant endogenous. 
+* We get the same outcome when we consider countries with income per capita less than or equal to USD 50K. We could deep dive further by collecting more data and by running models for countries in different income groups. 
 
 
 
