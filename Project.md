@@ -185,4 +185,5 @@ This model had a fairly low RMSE combined with coefficients that were significan
 * We get the same outcome when we consider countries with income per capita less than or equal to USD 50K. We could deep dive further by collecting more data and by running models for countries in different income groups. 
 
 
+### Submitted by: Hardik Gupta (hg8675) and Khushboo R Thakkar (kt24992)
 
